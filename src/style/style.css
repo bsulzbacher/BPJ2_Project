@@ -1,0 +1,17 @@
+.middle {
+    -fx-background-color: #d3d3d3;
+    -fx-border-radius: 10 10 0 0;
+ 	-fx-background-radius: 10 10 0;
+ 	-fx-border-color: #8dc73d;
+}
+
+.left {
+	-fx-background-color: #d3d3d3;
+ 	-fx-border-radius: 10 10 0 0;
+ 	-fx-background-radius: 10 10 0 0;
+ 	-fx-border-color: #8dc73d;
+}
+
+.top {
+	-fx-background-color:  #fff;
+}
