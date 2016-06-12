@@ -32,7 +32,8 @@ import model.Mitarbeiter;
 import utils.ConnectionHelper;
 
 public class MainView{
-	
+	StackPane root;
+	Button button1;
 	//
 	// Anzeige des Hauptfensters
 	// Das Fenster besteht aus drei Bereichen (Panels):
@@ -45,7 +46,7 @@ public class MainView{
 		 primaryStage.setTitle("San Aid");
 		
 		// Panel für den mittleren Bereich 
-		StackPane root = new StackPane();
+		root = new StackPane();
 		root.setPadding(new Insets(15, 12, 15, 12));
 		root.getStyleClass().add("middle");
 		
@@ -63,10 +64,16 @@ public class MainView{
 		// Panel für den linken Bereich (Menüpunkte)
 		AnchorPane anchorpane = new AnchorPane();
 		anchorpane.getStyleClass().add("left");
-		HBox hb = new HBox();
-		anchorpane.getChildren().addAll(hb);
+		GridPane menü = new GridPane();
+		anchorpane.getChildren().addAll(menü);
 		anchorpane.setMinSize(300, 100);
-		AnchorPane.setRightAnchor(hb, 10.0);
+		AnchorPane.setRightAnchor(menü, 10.0);
+		
+		//Test Button erstellen
+		button1 = new Button("Test");
+		button1.setMinSize(300, 20);
+		//Test button dem Menü hinzufügen
+		menü.add(button1,0,0);
 		
 		// Panel für das gesamte Fenster
 		// hinzufügen der 3 Bereiche zum ganzen Fenster
@@ -84,5 +91,15 @@ public class MainView{
         primaryStage.setY(0);
         primaryStage.sizeToScene();
         primaryStage.show();
+	}
+	
+	public void showTest(){
+		//Textfeld erstellen
+		Label test = new Label("TEST");
+		root.getChildren().add(test);
+	}
+	
+	public Button getTestButton() {
+		return button1;
 	}
 }
