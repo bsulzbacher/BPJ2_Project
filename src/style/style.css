@@ -15,3 +15,11 @@
 .top {
 	-fx-background-color:  #fff;
 }
+
+.login{
+	-fx-background-color:  #fff;
+}
+
+#error {
+	-fx-text-fill: red;
+}
