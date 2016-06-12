@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import controller.Controller;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,73 +15,91 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.Mitarbeiter;
 import utils.ConnectionHelper;
 
-public class show extends Application{
-
-	ConnectionHelper con;
-	public show() throws ClassNotFoundException, IOException, SQLException {
-		con = new ConnectionHelper();
-	}
-	 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
+public class MainView{
+	StackPane root;
+	Button button1;
+	//
+	// Anzeige des Hauptfensters
+	// Das Fenster besteht aus drei Bereichen (Panels):
+	// Top: Anzeige des Logos
+	// Middle: Anzeige der eigentlichen Funktionalitäten (Anzeige der Schadensfälle etc.)
+	// Left: Anzeige der Menü-Buttons
+	//
+	public void showMainView(Stage primaryStage){
+		Dimension screensize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		 primaryStage.setTitle("San Aid");
 		
-		String type = con.getTableType(0);
-		Dimension screensize = java.awt.Toolkit.getDefaultToolkit().getScreenSize ();
-		
-		//Middle View
-		StackPane root = new StackPane();
+		// Panel für den mittleren Bereich 
+		root = new StackPane();
 		root.setPadding(new Insets(15, 12, 15, 12));
 		root.getStyleClass().add("middle");
-
-		Label l = new Label(type);
-		root.getChildren().add(l);
-		//Top View
+		
+		// Panel für den oberen Bereich
 		FlowPane flow = new FlowPane();
 		flow.setPadding(new Insets(10, 10, 10, 10));
 		flow.getStyleClass().add("top");
 		flow.setHgap(5);
-		//show logo
+		// erstellen des Logos und hinzufügen zum oberen Panel
         final ImageView selectedImage = new ImageView();   
-        Image image1 = new Image(show.class.getResourceAsStream("../images/logo.jpg"));
+        Image image1 = new Image(MainView.class.getResourceAsStream("../images/logo.jpg"));
         selectedImage.setImage(image1);
         flow.getChildren().addAll(selectedImage);
 		
-		//Left View
+		// Panel für den linken Bereich (Menüpunkte)
 		AnchorPane anchorpane = new AnchorPane();
 		anchorpane.getStyleClass().add("left");
-		HBox hb = new HBox();
-		anchorpane.getChildren().addAll(hb);
+		GridPane menü = new GridPane();
+		anchorpane.getChildren().addAll(menü);
 		anchorpane.setMinSize(300, 100);
-		AnchorPane.setRightAnchor(hb, 10.0);
+		AnchorPane.setRightAnchor(menü, 10.0);
 		
-		//Layout
+		//Test Button erstellen
+		button1 = new Button("Test");
+		button1.setMinSize(300, 20);
+		//Test button dem Menü hinzufügen
+		menü.add(button1,0,0);
+		
+		// Panel für das gesamte Fenster
+		// hinzufügen der 3 Bereiche zum ganzen Fenster
 		BorderPane pane = new BorderPane();
 		pane.setLeft(anchorpane);
 		pane.setCenter(root);
 		pane.setTop(flow);
 
+		// Anzeige des Hauptfenster
         Scene scene = new Scene(pane, screensize.width, screensize.height);
         scene.getStylesheets().add
-        (show.class.getResource("../style/style.css").toExternalForm());
+        (MainView.class.getResource("../style/style.css").toExternalForm());
         primaryStage.setScene(scene);
+        primaryStage.setX(0);
+        primaryStage.setY(0);
+        primaryStage.sizeToScene();
         primaryStage.show();
-		
 	}
 	
-	 public static void main(String[] args) {
-	        launch(args);
-	 }
+	public void showTest(){
+		//Textfeld erstellen
+		Label test = new Label("TEST");
+		root.getChildren().add(test);
+	}
+	
+	public Button getTestButton() {
+		return button1;
+	}
 }
