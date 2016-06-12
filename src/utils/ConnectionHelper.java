@@ -22,5 +22,4 @@ public class ConnectionHelper {
 		return type;
 	}
 	
-	
 }
