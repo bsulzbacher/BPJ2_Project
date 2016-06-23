@@ -32,8 +32,14 @@ import model.Mitarbeiter;
 import utils.ConnectionHelper;
 
 public class MainView{
-	StackPane root;
-	Button button1;
+	private StackPane root;
+	private Button button1;
+	private Button button2;
+	private Button button3;
+	private Button button4;
+	private Button button5;
+	private TextField textField;
+	private Button speicherKostenvoranschlag;
 	//
 	// Anzeige des Hauptfensters
 	// Das Fenster besteht aus drei Bereichen (Panels):
@@ -69,12 +75,25 @@ public class MainView{
 		anchorpane.setMinSize(300, 100);
 		AnchorPane.setRightAnchor(menü, 10.0);
 		
-		//Test Button erstellen
-		button1 = new Button("Test");
+		button1 = new Button("Schaden erfassen");
 		button1.setMinSize(300, 20);
-		//Test button dem Menü hinzufügen
 		menü.add(button1,0,0);
 		
+		button2 = new Button("Kostenvoranschlag erstellen");
+		button2.setMinSize(300, 20);
+		menü.add(button2,0,1);
+		
+		button3 = new Button("Auftragserteilung");
+		button3.setMinSize(300, 20);
+		menü.add(button3,0,2);
+		
+		button4 = new Button("Rechnungserstellung");
+		button4.setMinSize(300, 20);
+		menü.add(button4,0,3);
+		
+		button5 = new Button("Rechnungsexport");
+		button5.setMinSize(300, 20);
+		menü.add(button5,0,4);
 		// Panel für das gesamte Fenster
 		// hinzufügen der 3 Bereiche zum ganzen Fenster
 		BorderPane pane = new BorderPane();
@@ -83,7 +102,7 @@ public class MainView{
 		pane.setTop(flow);
 
 		// Anzeige des Hauptfenster
-        Scene scene = new Scene(pane, screensize.width, screensize.height);
+        Scene scene = new Scene(pane, 1024, 600);
         scene.getStylesheets().add
         (MainView.class.getResource("../style/style.css").toExternalForm());
         primaryStage.setScene(scene);
@@ -93,13 +112,36 @@ public class MainView{
         primaryStage.show();
 	}
 	
+	public void zeichneKostenvoranschlag() {
+		textField = new TextField();
+		BorderPane pane = new BorderPane();
+		pane.setCenter(textField);
+		root.getChildren().add(pane);
+	}
+	
 	public void showTest(){
 		//Textfeld erstellen
 		Label test = new Label("TEST");
 		root.getChildren().add(test);
 	}
 	
-	public Button getTestButton() {
+	public Button getButtonErfassen() {
 		return button1;
+	}
+	
+	public Button getButtonKostenvoranschlag() {
+		return button2;
+	}
+	
+	public Button getButtonAuftragserteilung() {
+		return button3;
+	}
+	
+	public Button getButtonRechnungserstellung() {
+		return button4;
+	}
+	
+	public Button getButtonRechnungsexport() {
+		return button5;
 	}
 }

@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,6 +15,7 @@ import view.MainView;
 public class Controller {
 	private ConnectionHelper connection;
 	private Mitarbeiter mitarbeiter;
+	//private Kostenvoranschlag kostenvoranschlag;
 	
 	public Controller () throws ClassNotFoundException, IOException, SQLException {
 		connection = new ConnectionHelper();
@@ -79,14 +81,60 @@ public class Controller {
 	public void showMainView(Stage stage) throws ClassNotFoundException, IOException, SQLException {
 		final MainView main = new MainView();
 		main.showMainView(stage);
-		//Bei Klick auf den Testbutton wird die Funktion showTest() aus der Klasse
+		//Bei Klick auf den Testbutton wird die Funktion aus der Klasse
 		//MainView.java aufgerufen, um eine Inhalt im mittleren Bereich des Fensters anzuzeigen
 		// Hinzufügen eines Events bei Klick auf den Button "Anmelden
-		main.getTestButton().setOnAction(new EventHandler<ActionEvent>() {
+		main.getButtonErfassen().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
-				main.showTest();
+				erfasseSchadensfall(main);
 			}
        }); 
+		main.getButtonKostenvoranschlag().setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent arg0) {
+				erstelleKostenvoranschlag(main);
+			}
+       }); 
+		main.getButtonAuftragserteilung().setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent arg0) {
+				erteileAuftrag(main);
+			}
+       }); 
+		main.getButtonRechnungserstellung().setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent arg0) {
+				erstelleRechnung(main);
+			}
+       }); 
+		main.getButtonRechnungsexport().setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent arg0) {
+				exportRechnung(main);
+			}
+       }); 
+	}
+	
+	private void exportRechnung(MainView main) {
+		// TODO Christian
+		
+	}
+
+	protected void erstelleRechnung(MainView main) {
+		// TODO Isabella
+		
+	}
+
+	protected void erteileAuftrag(MainView main) {
+		// TODO Harald
+		
+	}
+
+	private void erstelleKostenvoranschlag(MainView main) {
+		// TODO Max
+		main.zeichneKostenvoranschlag();
+		
+	}
+
+	private void erfasseSchadensfall(MainView main) {
+		// TODO Philipp
+		
 	}
 }
 

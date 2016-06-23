@@ -2,11 +2,12 @@ package utils;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 
 import model.Mitarbeiter;
 
 public class ConnectionHelper {
-
+	//JDBC Datenbank Connection
 	private Connection connection;
 	
 	public ConnectionHelper() throws ClassNotFoundException, IOException, SQLException{
@@ -18,7 +19,6 @@ public class ConnectionHelper {
 		PreparedStatement stmt = connection.prepareStatement("SELECT idPerson, vorname, name, email FROM Stammdaten where email = ?");
 		stmt.setString(1,benutzername);
 		ResultSet rs= stmt.executeQuery();
-		
 		Mitarbeiter mitarbeiter = null;
 		int id = 0;
 		String vorname = "";
@@ -30,6 +30,12 @@ public class ConnectionHelper {
 			nachname = rs.getString("name");
 			email = rs.getString("email");
 		}
+		/*ArrayList<Mitarbeiter> list = new ArrayList<Mitarbeiter>();
+		list.add(mitarbeiter);
+		int i;
+		for(i = 0; i < list.size(); i++) {
+			Mitarbeiter ma = list.get(i);
+		}*/
 		if(id != 0 && vorname.length() != 0 && nachname.length() != 0 && email.length() != 0)
 			mitarbeiter = new Mitarbeiter(vorname, nachname, id, email);
 		return mitarbeiter;

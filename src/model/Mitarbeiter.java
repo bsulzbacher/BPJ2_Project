@@ -9,7 +9,4 @@ public class Mitarbeiter extends Person{
 		this.mitarbeiter_id = id;
 		this.email = email;
 	}
-	
-	
-	
 }
