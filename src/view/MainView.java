@@ -1,20 +1,11 @@
 package view;
 
 import java.awt.Dimension;
-import java.io.IOException;
-import java.sql.SQLException;
 
-import controller.Controller;
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,14 +13,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.Mitarbeiter;
-import utils.ConnectionHelper;
 
 public class MainView{
 	private StackPane root;
@@ -114,9 +99,13 @@ public class MainView{
 	
 	public void zeichneKostenvoranschlag() {
 		textField = new TextField();
-		BorderPane pane = new BorderPane();
-		pane.setCenter(textField);
-		root.getChildren().add(pane);
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+		
+		
+		grid.add(textField,1,1,1,1);
+		root.getChildren().add(grid);
 	}
 	
 	public void showTest(){
