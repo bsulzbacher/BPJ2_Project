@@ -1,12 +1,14 @@
 package view;
 
+
+
 import java.awt.Dimension;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -102,9 +104,36 @@ public class MainView{
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
+		grid.setPadding(new Insets(0,10,0,10));
 		
+		grid.gridLinesVisibleProperty();
 		
-		grid.add(textField,1,1,1,1);
+		// Category in column 2, row 1
+	    Label category = new Label("Sales:");
+	    grid.add(category, 1, 0); 
+
+	    // Title in column 3, row 1
+	    Label chartTitle = new Label("Current Year");
+
+	    grid.add(chartTitle, 2, 0);
+
+	    // Subtitle in columns 2-3, row 2
+	    Label chartSubtitle = new Label("Goods and Services");
+	    grid.add(chartSubtitle, 1, 1, 2, 1);
+
+	    
+
+	    // Left label in column 1 (bottom), row 3
+	    Label goodsPercent = new Label("Goods\n80%");
+
+	    grid.add(goodsPercent, 0, 2); 
+
+	  
+
+	    // Right label in column 4 (top), row 3
+	    Label servicesPercent = new Label("Services\n20%");
+
+	    grid.add(servicesPercent, 3, 2);
 		root.getChildren().add(grid);
 	}
 	
