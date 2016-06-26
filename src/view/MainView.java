@@ -5,8 +5,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Mitarbeiter;
 import model.Person;
+import model.Schadensfall;
+import model.Material;
 
 import java.awt.Dimension;
+
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -41,8 +44,17 @@ public class MainView{
 	private Button button5;
 	private TextField textField;
 	private Button speicherKostenvoranschlag;
+
 	private ObservableList<Person> GSList = FXCollections.observableArrayList();
 	private ObservableList<Mitarbeiter> MAList = FXCollections.observableArrayList();
+	
+	private ChoiceBox<Schadensfall> sf;
+	private ChoiceBox<Material> mat;
+	private ObservableList<Schadensfall> sfList = FXCollections.observableArrayList();
+	private ObservableList<Material> matList = FXCollections.observableArrayList();
+	
+	private TextField anzMat;
+	private Button matHinzu;
 	//
 	// Anzeige des Hauptfensters
 	// Das Fenster besteht aus drei Bereichen (Panels):
@@ -128,30 +140,26 @@ public class MainView{
 		Label t1 =new Label("Wähle Schadensfall:");
 		t1.setPrefWidth(200);
 		grid.add(t1,0,0);
-		ChoiceBox sf = new ChoiceBox(FXCollections.observableArrayList(
-			    "First", "Second", "Third")
-			);
+		sf = new ChoiceBox<Schadensfall>(sfList);
 		sf.setMinWidth(200);
 		grid.add(sf, 1,0);
 		
 		Label t2 =new Label("Wähle Material:");
 		grid.add(t2, 0,1);
 		
-		ChoiceBox mat =new ChoiceBox(FXCollections.observableArrayList(
-			    "First", "Second", "Third")
-			);
+		mat =new ChoiceBox<Material>(matList);
 		mat.setMinWidth(300);
 		grid.add(mat, 1, 1);
 		
 		Label t3=new Label("Anzahl Material");
-		grid.add(t3, 2, 0);
+		grid.add(t3, 0, 2);
 		
-		TextField anz=new TextField();
-		anz.setMaxWidth(50);
-		grid.add(anz, 2, 1);
+		anzMat=new TextField();
+		anzMat.setMaxWidth(50);
+		grid.add(anzMat, 1, 2);
 	    
-		Button hinzu=new Button("Hinzufügen");
-		grid.add(hinzu, 2, 2);
+		matHinzu=new Button("Hinzufügen");
+		grid.add(matHinzu, 2, 2);
 		
 		border.setTop(grid);
 		
@@ -186,7 +194,7 @@ public class MainView{
 		///unten
 		
 		HBox box=new HBox();
-		box.setPadding(new Insets(10,20,10,20));
+		box.setPadding(new Insets(10,10,10,10));
 		box.setAlignment(Pos.CENTER_RIGHT);
 		
 		Label t4=new Label("Gesamtsumme: ");
@@ -196,14 +204,27 @@ public class MainView{
 		
 		box.getChildren().addAll(t4,sum,t5,submit);
 		
-		
-		border.setBottom(box);
-		
-		
-		
+		mid.add(box, 0, 1);
+
 		
 		root.getChildren().add(border);
 	}	
+	
+	
+	
+	public void setSfList(ObservableList<Schadensfall> SFList) {
+		sfList = SFList;
+	}
+
+	public void setMatList(ObservableList<Material> MATList) {
+		matList = MATList;
+	}
+
+	
+	
+	
+	
+	
 	public void showTest(){
 		//Textfeld erstellen
 		Label test = new Label("TEST");

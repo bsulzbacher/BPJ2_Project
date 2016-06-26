@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 
+import model.Material;
 import model.Mitarbeiter;
+import model.Schadensfall;
 
 public class ConnectionHelper {
 	//JDBC Datenbank Connection
@@ -53,5 +55,40 @@ public class ConnectionHelper {
 		
 		return allMAList;
 	}
+	
+	public ArrayList<Schadensfall> getAllSchaeden() throws SQLException {
+		PreparedStatement stmt = connection.prepareStatement("SELECT a.idSchadensfall,c.Vorname,c.Name, d.Strasse, d.Hnr, d.Ort FROM Schadensfall a inner join  Geschädigte b on a.idSchadensfall=b.SchadensfallID inner join Stammdaten c on b.PersonenId=c.idPerson inner join Adresse d on a.idAdresse=d.idAdresse");
+		ResultSet rs= stmt.executeQuery();
+		
+		ArrayList<Schadensfall> allSchaedenList = new ArrayList<Schadensfall>();
+		
+		while(rs.next()) {
+			int idSchaden=rs.getInt("idSchadensfall");
+			String name=rs.getString("Name")+" "+rs.getString("Vorname");
+			String adresse=rs.getString("Strasse")+" "+rs.getString("Hnr")+" "+rs.getString("Ort");
+			
+			allSchaedenList.add(new Schadensfall(idSchaden,name,adresse));
+		}
+		
+		return allSchaedenList;
+	}
+	
+	public ArrayList<Material> getAllMaterial() throws SQLException {
+		PreparedStatement stmt = connection.prepareStatement("SELECT idMaterial,Kategorie,  materialName, VKPreis FROM Material;");
+		ResultSet rs= stmt.executeQuery();
+		
+		ArrayList<Material> allMaterialList = new ArrayList<Material>();
+		
+		while(rs.next()) {
+			int idMaterial=rs.getInt("idMaterial");
+			String name=rs.getString("Kategorie")+" "+rs.getString("materialName");
+			double vkPreis=rs.getDouble("VKPReis");
+			
+			allMaterialList.add(new Material(idMaterial,name,vkPreis));
+		}
+		
+		return allMaterialList;
+	}
+	
 	
 }

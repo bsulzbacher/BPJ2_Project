@@ -2,13 +2,14 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import model.Mitarbeiter;
+import model.Schadensfall;
+import model.Material;
 import utils.ConnectionHelper;
 import view.LoginView;
 import view.MainView;
@@ -97,7 +98,12 @@ public class Controller {
        }); 
 		main.getButtonKostenvoranschlag().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
-				erstelleKostenvoranschlag(main);
+				try {
+					erstelleKostenvoranschlag(main);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
        }); 
 		main.getButtonAuftragserteilung().setOnAction(new EventHandler<ActionEvent>() {
@@ -133,8 +139,10 @@ public class Controller {
 		
 	}
 
-	private void erstelleKostenvoranschlag(MainView main) {
+	private void erstelleKostenvoranschlag(MainView main) throws SQLException {
 		// TODO Max
+		main.setSfList(FXCollections.observableArrayList(connection.getAllSchaeden()));
+		main.setMatList(FXCollections.observableArrayList(connection.getAllMaterial()));
 		main.zeichneKostenvoranschlag();
 		
 	}
