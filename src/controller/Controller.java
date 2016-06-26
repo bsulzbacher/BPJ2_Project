@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
@@ -86,7 +87,12 @@ public class Controller {
 		// Hinzufügen eines Events bei Klick auf den Button "Anmelden
 		main.getButtonErfassen().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
-				erfasseSchadensfall(main);
+				try {
+					erfasseSchadensfall(main);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
        }); 
 		main.getButtonKostenvoranschlag().setOnAction(new EventHandler<ActionEvent>() {
@@ -133,9 +139,10 @@ public class Controller {
 		
 	}
 
-	private void erfasseSchadensfall(MainView main) {
+	private void erfasseSchadensfall(MainView main) throws SQLException {
 		// TODO Philipp
-		
+		main.setMAList(FXCollections.observableArrayList(connection.getAllMitarbeiter()));
+		main.zeichneSchadenfallerfassung();
 	}
 }
 

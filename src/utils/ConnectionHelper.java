@@ -41,4 +41,17 @@ public class ConnectionHelper {
 		return mitarbeiter;
 	}
 	
+	public ArrayList<Mitarbeiter> getAllMitarbeiter() throws SQLException {
+		PreparedStatement stmt = connection.prepareStatement("SELECT idPerson, vorname, name, email FROM Stammdaten");
+		ResultSet rs= stmt.executeQuery();
+		
+		ArrayList<Mitarbeiter> allMAList = new ArrayList<Mitarbeiter>();
+		
+		while(rs.next()) {
+			allMAList.add(new Mitarbeiter(rs.getString("vorname"),rs.getString("name"),rs.getInt("idPerson"),rs.getString("email")));
+		}
+		
+		return allMAList;
+	}
+	
 }

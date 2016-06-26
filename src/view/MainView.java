@@ -3,16 +3,21 @@ package view;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.Mitarbeiter;
+import model.Person;
 
 import java.awt.Dimension;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -36,6 +41,8 @@ public class MainView{
 	private Button button5;
 	private TextField textField;
 	private Button speicherKostenvoranschlag;
+	private ObservableList<Person> GSList = FXCollections.observableArrayList();
+	private ObservableList<Mitarbeiter> MAList = FXCollections.observableArrayList();
 	//
 	// Anzeige des Hauptfensters
 	// Das Fenster besteht aus drei Bereichen (Panels):
@@ -109,7 +116,7 @@ public class MainView{
 	}
 	
 	public void zeichneKostenvoranschlag() {
-		
+		root.getChildren().clear();
 		BorderPane border=new BorderPane();
 			
 		GridPane grid = new GridPane();
@@ -285,6 +292,74 @@ public class MainView{
 //        stage.show();
 //      }//HARY Ende
 ////..............................................................................
+
+	public void zeichneSchadenfallerfassung() {
+		// Philipp
+		root.getChildren().clear();
+		GridPane gridSchadensfall = new GridPane();
+		gridSchadensfall.setHgap(10);
+		gridSchadensfall.setVgap(10);
+		gridSchadensfall.setPadding(new Insets(10,10,10,10));
+		Label geschaedigterLabel = new Label("Geschädigten auswählen:");
+		Label mitarbeiterLabel = new Label("Mitarbeiter auswählen:");
+		Label schadensartLabel = new Label("Schadensart:");
+		Label anlagedatumLabel = new Label("Anlagedatum:");
+		Label schadensdatumLabel = new Label("Schadensdatum:");
+		Label extSchadensnummerLabel = new Label("Externe Schadensnummer:");
+		Label beschreibungLabel = new Label("Schadensbeschreibung:");
+		Label schadensadresseLabel = new Label("Schadensadresse:");
+		TextField anlagedatumText = new TextField();
+		TextField schadensdatumText = new TextField();
+		TextField extSchadensnummerText = new TextField();
+		TextArea beschreibungText = new TextArea();
+		Button okAndSaveButton = new Button();
+		okAndSaveButton.setText("OK und Speichern");
+		//beschreibungText.setMinSize(500, 200);
+		//beschreibungText.setWr
+		
+		ComboBox<Person> geschaedigterComboBox = new ComboBox<Person>(GSList);
+		ComboBox<Mitarbeiter> mitarbeiterComboBox = new ComboBox<Mitarbeiter>(MAList);
+		ComboBox schadensartComboBox = new ComboBox();
+		ComboBox schadensadresseComboBox = new ComboBox();
+				
+		//MAList.setAll(col);
+		
+		gridSchadensfall.add(mitarbeiterLabel, 0, 0);
+		gridSchadensfall.add(mitarbeiterComboBox, 1, 0);
+		gridSchadensfall.add(anlagedatumLabel, 2, 0);
+		gridSchadensfall.add(anlagedatumText, 3, 0);
+		
+		gridSchadensfall.add(geschaedigterLabel, 0, 3);
+		gridSchadensfall.add(geschaedigterComboBox, 1,3);
+		
+		gridSchadensfall.add(schadensadresseLabel, 2, 3);
+		gridSchadensfall.add(schadensadresseComboBox, 3,3);
+
+		gridSchadensfall.add(schadensartLabel, 0, 4);
+		gridSchadensfall.add(schadensartComboBox, 1,4);
+		gridSchadensfall.add(schadensdatumLabel, 2, 4);
+		gridSchadensfall.add(schadensdatumText, 3, 4);
+		
+		gridSchadensfall.add(extSchadensnummerLabel, 0, 6);
+		gridSchadensfall.add(extSchadensnummerText, 1, 6);
+			
+		gridSchadensfall.add(beschreibungLabel, 0,7);
+		gridSchadensfall.add(beschreibungText,1,7,5,1);
+		
+		gridSchadensfall.add(okAndSaveButton, 3, 8,4,1);
+		
+		root.getChildren().add(gridSchadensfall);
+	}
+	
+	public void setGSList(ObservableList<Person> gSList) {
+		GSList = gSList;
+	}
+
+	public void setMAList(ObservableList<Mitarbeiter> mAList) {
+		MAList = mAList;
+	}
+
+
 }
 	
 	

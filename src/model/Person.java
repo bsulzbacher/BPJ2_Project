@@ -10,5 +10,13 @@ public class Person {
 		this.nachname = nachname;
 	}
 	
+	public String getVorname() {
+		return vorname;
+	}
+
+
+	public String getNachname() {
+		return nachname;
+	}
 	
 }

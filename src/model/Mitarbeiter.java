@@ -9,4 +9,18 @@ public class Mitarbeiter extends Person{
 		this.mitarbeiter_id = id;
 		this.email = email;
 	}
+	
+	@Override
+	public String toString() {
+        return mitarbeiter_id + " " + super.getNachname();
+    }
+	
+	public int getMitarbeiter_ID() {
+        return mitarbeiter_id;
+    }
+
+	public String getEmail() {
+		return email;
+	}
+	
 }
