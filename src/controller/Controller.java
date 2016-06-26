@@ -122,7 +122,8 @@ public class Controller {
 	}
 
 	protected void erteileAuftrag(MainView main) {
-		// TODO Harald
+		// TOODO Hary
+		main.alleKVs();
 		
 	}
 
