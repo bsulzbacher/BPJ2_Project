@@ -3,9 +3,16 @@ package view;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.awt.Dimension;
+
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -14,11 +21,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 @SuppressWarnings("restriction")
 public class MainView{
-	private static final String FXCollections = null;
+	//private static final String FXCollections = null;
 	private StackPane root;
 	private Button button1;
 	private Button button2;
@@ -100,43 +109,94 @@ public class MainView{
 	}
 	
 	public void zeichneKostenvoranschlag() {
-		textField = new TextField();
+		
+		BorderPane border=new BorderPane();
+			
 		GridPane grid = new GridPane();
-		grid.setHgap(10);
+		grid.setHgap(20);
 		grid.setVgap(10);
-		grid.setPadding(new Insets(0,10,0,10));
+		grid.setPadding(new Insets(0,20,0,20));
 		
-		grid.gridLinesVisibleProperty();
+		//grid.setGridLinesVisible(true); //zeichnet mir die Grid zum besseren ausrichten
+		Label t1 =new Label("Wähle Schadensfall:");
+		t1.setPrefWidth(200);
+		grid.add(t1,0,0);
+		ChoiceBox sf = new ChoiceBox(FXCollections.observableArrayList(
+			    "First", "Second", "Third")
+			);
+		sf.setMinWidth(200);
+		grid.add(sf, 1,0);
 		
-		// Category in column 2, row 1
-	    Label category = new Label("Sales:");
-	    grid.add(category, 1, 0); 
-
-	    // Title in column 3, row 1
-	    Label chartTitle = new Label("Current Year");
-
-	    grid.add(chartTitle, 2, 0);
-
-	    // Subtitle in columns 2-3, row 2
-	    Label chartSubtitle = new Label("Goods and Services");
-	    grid.add(chartSubtitle, 1, 1, 2, 1);
-
+		Label t2 =new Label("Wähle Material:");
+		grid.add(t2, 0,1);
+		
+		ChoiceBox mat =new ChoiceBox(FXCollections.observableArrayList(
+			    "First", "Second", "Third")
+			);
+		mat.setMinWidth(300);
+		grid.add(mat, 1, 1);
+		
+		Label t3=new Label("Anzahl Material");
+		grid.add(t3, 2, 0);
+		
+		TextField anz=new TextField();
+		anz.setMaxWidth(50);
+		grid.add(anz, 2, 1);
 	    
+		Button hinzu=new Button("Hinzufügen");
+		grid.add(hinzu, 2, 2);
+		
+		border.setTop(grid);
+		
+		//Mittelteil
+		
+		GridPane mid=new GridPane();
+		mid.setPadding(new Insets(0,20,0,20));
+		TableView tab=new TableView();
+		
 
-	    // Left label in column 1 (bottom), row 3
-	    Label goodsPercent = new Label("Goods\n80%");
-
-	    grid.add(goodsPercent, 0, 2); 
-
-	  
-
-	    // Right label in column 4 (top), row 3
-	    Label servicesPercent = new Label("Services\n20%");
-
-	    grid.add(servicesPercent, 3, 2);
-		root.getChildren().add(grid);
-	}
-	
+        TableColumn posCol = new TableColumn("Pos");
+        TableColumn matCol = new TableColumn("Material");
+        TableColumn epCol = new TableColumn("Einzelpreis");
+        TableColumn anzCol = new TableColumn("Anzahl");
+        TableColumn sumCol = new TableColumn ("Preis Summe");
+        
+        posCol.setMaxWidth(50);
+        matCol.setMinWidth(300);
+        matCol.setMaxWidth(1000);
+        
+        tab.getColumns().addAll(posCol, matCol, epCol, anzCol, sumCol);
+        final VBox vbox = new VBox();
+        vbox.setSpacing(5);
+        vbox.setPadding(new Insets(10, 0, 0, 10));
+        vbox.getChildren().addAll( tab);
+ 
+        
+		mid.add(vbox, 0,0);
+		
+		border.setCenter(mid);
+		
+		///unten
+		
+		HBox box=new HBox();
+		box.setPadding(new Insets(10,20,10,20));
+		box.setAlignment(Pos.CENTER_RIGHT);
+		
+		Label t4=new Label("Gesamtsumme: ");
+		Label sum=new Label("0,00");
+		Label t5=new Label(" € ");
+		Button submit=new Button("KV erstellen");
+		
+		box.getChildren().addAll(t4,sum,t5,submit);
+		
+		
+		border.setBottom(box);
+		
+		
+		
+		
+		root.getChildren().add(border);
+	}	
 	public void showTest(){
 		//Textfeld erstellen
 		Label test = new Label("TEST");
