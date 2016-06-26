@@ -123,7 +123,7 @@ public class Controller {
 
 	protected void erteileAuftrag(MainView main) {
 		// TOODO Hary
-		main.alleKVs();
+		//main.alleKVs();
 		
 	}
 

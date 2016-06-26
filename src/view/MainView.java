@@ -1,19 +1,8 @@
 package view;
 
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-
 import java.awt.Dimension;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -26,7 +15,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import utils.DBConnection;
 
 @SuppressWarnings("restriction")
 public class MainView{
@@ -177,66 +165,66 @@ public class MainView{
 	
 	//---------------------------------------------------------------------------------------
 	//HARY Start:
-	
-    private ObservableList<ObservableList> data;
-    private TableView tableview;
-
-	
-	public void alleKVs() {
-		Connection c;
-		//data = FXCollections.observableList();
-	  try{
-            c = DBConnection.getConnection();
-            //SQL FÜR ALLE SCHADENSFÄLLE
-			// ist ein Test, wirkliches SQL später
-            String SQL = "select * from Schadensfall;";
-            ResultSet rs = c.createStatement().executeQuery(SQL);
-            //ResultSet
-			
-			//Spalten dynamisch anfügen
-       
-            for(int i=0 ; i<rs.getMetaData().getColumnCount(); i++){
-                //We are using non property style for making dynamic table
-                final int j = i;               
-                TableColumn col = new TableColumn(rs.getMetaData().getColumnName(i+1));
-                col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){                   
-                    public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {                                                                                             
-                        return new SimpleStringProperty(param.getValue().get(j).toString());                       
-                    }                   
-                });
-            
-                tableview.getColumns().addAll(col);
-                System.out.println("Column ["+i+"] ");
-            }
-            while(rs.next()){
-                //Iterate Row
-                ObservableList<String> row = null;
-                for(int i=1 ; i<=rs.getMetaData().getColumnCount(); i++){
-                    //Iterate Column
-                    row.add(rs.getString(i));
-                }
-                System.out.println("Row [1] added "+row );
-                data.add(row);
- 
-            }
- 
-            //FINALLY ADDED TO TableView
-            tableview.setItems(data);
-          }catch(Exception e){
-              e.printStackTrace();
-              System.out.println("Error on Building Data");            
-          }
-      }     
-      public void start(Stage stage) throws Exception {
-        //TableView
-        tableview = new TableView();
-        alleKVs();
-        //Main Scene
-        Scene scene = new Scene(tableview);       
-        stage.setScene(scene);
-        stage.show();
-      }//HARY Ende
-//..............................................................................
+//	
+//    private ObservableList<ObservableList> data;
+//    private TableView tableview;
+//
+//	
+//	public void alleKVs() {
+//		Connection c;
+//		//data = FXCollections.observableList();
+//	  try{
+//            c = DBConnection.getConnection();
+//            //SQL FÜR ALLE SCHADENSFÄLLE
+//			// ist ein Test, wirkliches SQL später
+//            String SQL = "select * from Schadensfall;";
+//            ResultSet rs = c.createStatement().executeQuery(SQL);
+//            //ResultSet
+//			
+//			//Spalten dynamisch anfügen
+//       
+//            for(int i=0 ; i<rs.getMetaData().getColumnCount(); i++){
+//                //We are using non property style for making dynamic table
+//                final int j = i;               
+//                TableColumn col = new TableColumn(rs.getMetaData().getColumnName(i+1));
+//                col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){                   
+//                    public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {                                                                                             
+//                        return new SimpleStringProperty(param.getValue().get(j).toString());                       
+//                    }                   
+//                });
+//            
+//                tableview.getColumns().addAll(col);
+//                System.out.println("Column ["+i+"] ");
+//            }
+//            while(rs.next()){
+//                //Iterate Row
+//                ObservableList<String> row = null;
+//                for(int i=1 ; i<=rs.getMetaData().getColumnCount(); i++){
+//                    //Iterate Column
+//                    row.add(rs.getString(i));
+//                }
+//                System.out.println("Row [1] added "+row );
+//                data.add(row);
+// 
+//            }
+// 
+//            //FINALLY ADDED TO TableView
+//            tableview.setItems(data);
+//          }catch(Exception e){
+//              e.printStackTrace();
+//              System.out.println("Error on Building Data");            
+//          }
+//      }     
+//      public void start(Stage stage) throws Exception {
+//        //TableView
+//        tableview = new TableView();
+//        alleKVs();
+//        //Main Scene
+//        Scene scene = new Scene(tableview);       
+//        stage.setScene(scene);
+//        stage.show();
+//      }//HARY Ende
+////..............................................................................
 }
 	
 	
