@@ -3,13 +3,13 @@ package view;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.KvItem;
 import model.Mitarbeiter;
 import model.Person;
 import model.Schadensfall;
 import model.Material;
 
 import java.awt.Dimension;
-
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +23,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -49,12 +50,15 @@ public class MainView{
 	private ObservableList<Mitarbeiter> MAList = FXCollections.observableArrayList();
 	
 	private ChoiceBox<Schadensfall> sf;
-	private ChoiceBox<Material> mat;
+	private ChoiceBox<Material> matBox;
 	private ObservableList<Schadensfall> sfList = FXCollections.observableArrayList();
 	private ObservableList<Material> matList = FXCollections.observableArrayList();
-	
+	private ObservableList<KvItem> kvList = FXCollections.observableArrayList();
+	private TableView tab;
 	private TextField anzMat;
 	private Button matHinzu;
+	private double gesamtSumKv;
+	private Label KVsum;
 	//
 	// Anzeige des Hauptfensters
 	// Das Fenster besteht aus drei Bereichen (Panels):
@@ -147,9 +151,10 @@ public class MainView{
 		Label t2 =new Label("Wähle Material:");
 		grid.add(t2, 0,1);
 		
-		mat =new ChoiceBox<Material>(matList);
-		mat.setMinWidth(300);
-		grid.add(mat, 1, 1);
+		matBox =new ChoiceBox<Material>(matList);
+		matBox.setMinWidth(300);
+		grid.add(matBox, 1, 1);
+		
 		
 		Label t3=new Label("Anzahl Material");
 		grid.add(t3, 0, 2);
@@ -167,28 +172,31 @@ public class MainView{
 		
 		GridPane mid=new GridPane();
 		mid.setPadding(new Insets(0,20,0,20));
-		TableView tab=new TableView();
+		tab=new TableView();
 		
 
         TableColumn posCol = new TableColumn("Pos");
+        posCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("pos".toString()));
         TableColumn matCol = new TableColumn("Material");
+        matCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("matName"));
         TableColumn epCol = new TableColumn("Einzelpreis");
+        epCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("vkPreis".toString()));
         TableColumn anzCol = new TableColumn("Anzahl");
+        anzCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("anzahl".toString()));
         TableColumn sumCol = new TableColumn ("Preis Summe");
+        sumCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("summe".toString()));
         
         posCol.setMaxWidth(50);
         matCol.setMinWidth(300);
         matCol.setMaxWidth(1000);
         
         tab.getColumns().addAll(posCol, matCol, epCol, anzCol, sumCol);
+        tab.setItems(kvList);
         final VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
         vbox.getChildren().addAll( tab);
- 
-        
 		mid.add(vbox, 0,0);
-		
 		border.setCenter(mid);
 		
 		///unten
@@ -198,19 +206,19 @@ public class MainView{
 		box.setAlignment(Pos.CENTER_RIGHT);
 		
 		Label t4=new Label("Gesamtsumme: ");
-		Label sum=new Label("0,00");
+		KVsum=new Label(Double.toString(gesamtSumKv));
 		Label t5=new Label(" € ");
 		Button submit=new Button("KV erstellen");
 		
-		box.getChildren().addAll(t4,sum,t5,submit);
-		
+		box.getChildren().addAll(t4,KVsum,t5,submit);		
 		mid.add(box, 0, 1);
 
-		
 		root.getChildren().add(border);
 	}	
 	
-	
+	public ObservableList<KvItem> getKvList(){
+		return kvList;
+	}
 	
 	public void setSfList(ObservableList<Schadensfall> SFList) {
 		sfList = SFList;
@@ -219,12 +227,33 @@ public class MainView{
 	public void setMatList(ObservableList<Material> MATList) {
 		matList = MATList;
 	}
+	
+	public ChoiceBox<Material> getMatBox(){
+		return matBox;
+	}
+		
+	
+	public Button getButtonMatHinzu() {
+		return matHinzu;
+	}
+	
+	public TextField getAnzMat(){
+		return anzMat;
+	}
+	
+		
+	public double getGesamtSumKv() {
+		return gesamtSumKv;
+	}
+	
+	public void setGesamtSumKv(double gesamtSumKv) {
+		this.gesamtSumKv= gesamtSumKv;
+	}
 
-	
-	
-	
-	
-	
+	public void refreshKVsum() {
+		KVsum.setText(Double.toString(gesamtSumKv));
+	}
+
 	public void showTest(){
 		//Textfeld erstellen
 		Label test = new Label("TEST");

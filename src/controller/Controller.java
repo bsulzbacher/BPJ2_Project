@@ -3,10 +3,16 @@ package controller;
 import java.io.IOException;
 import java.sql.SQLException;
 
+
+
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Label;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.stage.Stage;
+import model.KvItem;
 import model.Mitarbeiter;
 import model.Schadensfall;
 import model.Material;
@@ -15,6 +21,7 @@ import view.LoginView;
 import view.MainView;
 
 public class Controller {
+	private int counterKvPos=0;
 	private ConnectionHelper connection;
 	private Mitarbeiter mitarbeiter;
 	//private Kostenvoranschlag kostenvoranschlag;
@@ -116,13 +123,12 @@ public class Controller {
 				erstelleRechnung(main);
 			}
        }); 
-		main.getButtonRechnungsexport().setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent arg0) {
-				exportRechnung(main);
-			}
-       }); 
+		
+	
 	}
 	
+	
+
 	private void exportRechnung(MainView main) {
 		// TODO Christian
 		
@@ -139,12 +145,23 @@ public class Controller {
 		
 	}
 
-	private void erstelleKostenvoranschlag(MainView main) throws SQLException {
+	private void erstelleKostenvoranschlag(final MainView main) throws SQLException {
 		// TODO Max
 		main.setSfList(FXCollections.observableArrayList(connection.getAllSchaeden()));
 		main.setMatList(FXCollections.observableArrayList(connection.getAllMaterial()));
 		main.zeichneKostenvoranschlag();
 		
+		main.getButtonMatHinzu().setOnAction(new EventHandler<ActionEvent>() {
+
+			public void handle(ActionEvent arg0) {
+				Material neuMat=main.getMatBox().getSelectionModel().getSelectedItem();
+				counterKvPos++;
+				KvItem item=new KvItem(counterKvPos, neuMat.getMaterialName(), neuMat.getVkPreis(),Integer.parseInt(main.getAnzMat().getText()));
+				main.getKvList().add(item);
+				main.setGesamtSumKv(main.getGesamtSumKv()+item.getSumme());
+				main.refreshKVsum();
+			}
+		}); 
 	}
 
 	private void erfasseSchadensfall(MainView main) throws SQLException {

@@ -6,12 +6,14 @@ public class Material {
 	private String materialName;
 	private double vkPreis;
 	
+	
 	public Material(int idMaterial, String materialName, double vkPreis) {
 		super();
 		this.idMaterial = idMaterial;
 		this.materialName = materialName;
 		this.vkPreis = vkPreis;
 	}
+	
 
 	public int getIdMaterial() {
 		return idMaterial;
@@ -27,7 +29,7 @@ public class Material {
 
 	@Override
 	public String toString() {
-		return materialName+" à" + vkPreis+" €" ;
+		return materialName+" à " + vkPreis+" €" ;
 	}
 	
 	
