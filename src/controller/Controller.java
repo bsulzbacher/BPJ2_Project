@@ -121,7 +121,12 @@ public class Controller {
        }); 
 		main.getButtonAuftragserteilung().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
-				erteileAuftrag(main);
+				try {
+					erteileAuftrag(main);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
        }); 
 		main.getButtonRechnungserstellung().setOnAction(new EventHandler<ActionEvent>() {
@@ -145,11 +150,27 @@ public class Controller {
 		
 	}
 
-	protected void erteileAuftrag(MainView main) {
+	protected void erteileAuftrag(final MainView main) throws SQLException {
 		// TOODO Hary
 		//main.alleKVs();
-		
+//		main.setKostenvoranschlagList(FXCollections.observableArrayList(connection.getAllKostenvoranschlag()));
+//		main.setMatList(FXCollections.observableArrayList(connection.getAllMaterial()));
+//		main.zeichneKostenvoranschlag();
+//		
+//		main.getButtonMatHinzu().setOnAction(new EventHandler<ActionEvent>() {
+//
+//			public void handle(ActionEvent arg0) {
+//				Material neuMat=main.getMatBox().getSelectionModel().getSelectedItem();
+//				counterKvPos++;
+//				KvItem item=new KvItem(counterKvPos, neuMat.getMaterialName(), neuMat.getVkPreis(),Integer.parseInt(main.getAnzMat().getText()));
+//				main.getKvList().add(item);
+//				main.setGesamtSumKv(main.getGesamtSumKv()+item.getSumme());
+//				main.refreshKVsum();
+//			}
+//		}); 
 	}
+		
+	
 
 	private void erstelleKostenvoranschlag(final MainView main) throws SQLException {
 		// TODO Max
