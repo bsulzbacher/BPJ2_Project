@@ -1,15 +1,17 @@
 package model;
 
 public class KvItem {
+	private int idMaterial;
 	private int pos;
 	private String matName;
 	private double vkPreis;
 	private int anzahl;
 	private double summe;
 	
-	public KvItem(int pos, String matName, double vkPreis, int anzahl) {
+	public KvItem(int pos, int idMaterial, String matName, double vkPreis, int anzahl) {
 		super();
 		this.pos = pos;
+		this.idMaterial=idMaterial;
 		this.matName = matName;
 		this.vkPreis = vkPreis;
 		this.anzahl = anzahl;
@@ -18,6 +20,11 @@ public class KvItem {
 	public int getPos() {
 		return pos;
 	}
+	
+	public int getIdMaterial(){
+		return idMaterial;
+	}
+	
 	public String getMatName() {
 		return matName;
 	}

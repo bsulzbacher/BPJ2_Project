@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 
+import javafx.collections.ObservableList;
+import model.KvItem;
 import model.Material;
 import model.Mitarbeiter;
 import model.Schadensfall;
@@ -88,6 +90,28 @@ public class ConnectionHelper {
 		}
 		
 		return allMaterialList;
+	}
+	
+	public void writeKv(int idSchaden, ObservableList<KvItem> kvItems) throws SQLException{
+		Statement wrKV = connection.createStatement();
+		String query;
+		query="insert into Kostenvoranschlag(idSchadensfall,verschickt,Freigegeben) values ("+idSchaden+",'nein','nein')"; 
+		wrKV.executeUpdate(query);
+		
+		PreparedStatement read=connection.prepareStatement("SELECT distinct last_insert_id() FROM Sanierung.Kostenvoranschlag;");
+		ResultSet rs=read.executeQuery();
+		int kvId=0;
+		while (rs.next()){
+			kvId=rs.getInt("last_insert_id()");			
+		}	
+		
+		for (KvItem i:kvItems){
+			query="insert into Verbrauch (idSchadensfall,idMaterial,idKV,verranschlagt) values ("+idSchaden+","+i.getIdMaterial()+","+kvId+","+i.getAnzahl()+");";
+			wrKV.executeUpdate(query);
+		}
+		
+	
+		
 	}
 	
 	

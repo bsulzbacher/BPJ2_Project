@@ -10,6 +10,7 @@ import model.Schadensfall;
 import model.Material;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,7 +50,7 @@ public class MainView{
 	private ObservableList<Person> GSList = FXCollections.observableArrayList();
 	private ObservableList<Mitarbeiter> MAList = FXCollections.observableArrayList();
 	
-	private ChoiceBox<Schadensfall> sf;
+	private ChoiceBox<Schadensfall> sfBox;
 	private ChoiceBox<Material> matBox;
 	private ObservableList<Schadensfall> sfList = FXCollections.observableArrayList();
 	private ObservableList<Material> matList = FXCollections.observableArrayList();
@@ -59,6 +60,7 @@ public class MainView{
 	private Button matHinzu;
 	private double gesamtSumKv;
 	private Label KVsum;
+	private Button kvSubmit;
 	//
 	// Anzeige des Hauptfensters
 	// Das Fenster besteht aus drei Bereichen (Panels):
@@ -144,9 +146,9 @@ public class MainView{
 		Label t1 =new Label("Wähle Schadensfall:");
 		t1.setPrefWidth(200);
 		grid.add(t1,0,0);
-		sf = new ChoiceBox<Schadensfall>(sfList);
-		sf.setMinWidth(200);
-		grid.add(sf, 1,0);
+		sfBox = new ChoiceBox<Schadensfall>(sfList);
+		sfBox.setMinWidth(200);
+		grid.add(sfBox, 1,0);
 		
 		Label t2 =new Label("Wähle Material:");
 		grid.add(t2, 0,1);
@@ -208,13 +210,17 @@ public class MainView{
 		Label t4=new Label("Gesamtsumme: ");
 		KVsum=new Label(Double.toString(gesamtSumKv));
 		Label t5=new Label(" € ");
-		Button submit=new Button("KV erstellen");
+		kvSubmit=new Button("KV erstellen");
 		
-		box.getChildren().addAll(t4,KVsum,t5,submit);		
+		box.getChildren().addAll(t4,KVsum,t5,kvSubmit);		
 		mid.add(box, 0, 1);
 
 		root.getChildren().add(border);
 	}	
+	
+	public Button getKvSubmit(){
+		return kvSubmit;
+	}
 	
 	public ObservableList<KvItem> getKvList(){
 		return kvList;
@@ -222,6 +228,15 @@ public class MainView{
 	
 	public void setSfList(ObservableList<Schadensfall> SFList) {
 		sfList = SFList;
+	}
+
+	
+	public ObservableList<Schadensfall> getSfList() {
+		return sfList;
+	}
+
+	public ChoiceBox<Schadensfall> getSfBox() {
+		return sfBox;
 	}
 
 	public void setMatList(ObservableList<Material> MATList) {
@@ -254,11 +269,7 @@ public class MainView{
 		KVsum.setText(Double.toString(gesamtSumKv));
 	}
 
-	public void showTest(){
-		//Textfeld erstellen
-		Label test = new Label("TEST");
-		root.getChildren().add(test);
-	}
+	
 	
 	public Button getButtonErfassen() {
 		return button1;

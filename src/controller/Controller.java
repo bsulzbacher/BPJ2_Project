@@ -5,10 +5,16 @@ import java.sql.SQLException;
 
 
 
+import java.util.ArrayList;
+
+
+
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.stage.Stage;
@@ -147,19 +153,74 @@ public class Controller {
 
 	private void erstelleKostenvoranschlag(final MainView main) throws SQLException {
 		// TODO Max
+		main.getKvList().clear();
+		counterKvPos=0;
+		main.setGesamtSumKv(0);
 		main.setSfList(FXCollections.observableArrayList(connection.getAllSchaeden()));
 		main.setMatList(FXCollections.observableArrayList(connection.getAllMaterial()));
 		main.zeichneKostenvoranschlag();
+		final Alert alert = new Alert(AlertType.INFORMATION);
+
 		
 		main.getButtonMatHinzu().setOnAction(new EventHandler<ActionEvent>() {
-
 			public void handle(ActionEvent arg0) {
+				
 				Material neuMat=main.getMatBox().getSelectionModel().getSelectedItem();
-				counterKvPos++;
-				KvItem item=new KvItem(counterKvPos, neuMat.getMaterialName(), neuMat.getVkPreis(),Integer.parseInt(main.getAnzMat().getText()));
-				main.getKvList().add(item);
-				main.setGesamtSumKv(main.getGesamtSumKv()+item.getSumme());
-				main.refreshKVsum();
+				if (neuMat!=null){
+					if(main.getAnzMat().getText().matches("^?\\d+$")){
+						counterKvPos++;
+						KvItem item=new KvItem(counterKvPos,neuMat.getIdMaterial(), neuMat.getMaterialName(), neuMat.getVkPreis(),Integer.parseInt(main.getAnzMat().getText()));
+						main.getKvList().add(item);
+						main.setGesamtSumKv(main.getGesamtSumKv()+item.getSumme());
+						main.refreshKVsum();
+			
+					} else{
+						alert.setContentText("Falscher Eingabewert der Materialanzahl!");
+				        alert.setTitle("Fehler");
+				        alert.setHeaderText("EingabeFehler Anzahl");
+				        alert.showAndWait();
+					}
+					
+				}else{
+					   
+				        alert.setContentText("Material auswählen!");
+				        alert.setTitle("Fehler");
+				        alert.setHeaderText("EingabeFehler Material");
+				        alert.showAndWait();
+				}
+			}
+		}); 
+		
+		main.getKvSubmit().setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent arg0) {
+				Schadensfall sf=main.getSfBox().getSelectionModel().getSelectedItem();
+				
+				if (sf!=null){
+					if (!main.getKvList().isEmpty()){
+						try {
+							connection.writeKv(sf.getIdSchadensfall(), main.getKvList());
+							alert.setContentText("Fertig");
+							alert.setTitle("KV erstellt");
+							alert.setHeaderText("Der Kostenvoranschlag wurde erstellt!");
+							alert.showAndWait();
+							erstelleKostenvoranschlag(main);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else{
+						alert.setContentText("Keine KV-Positionen enthalten!");
+						alert.setTitle("Fehler");
+						alert.setHeaderText("EingabeFehler KV-Positionen");
+						alert.showAndWait();
+					}
+					
+				} else {
+					alert.setContentText("Schadensfall auswählen!");
+			        alert.setTitle("Fehler");
+			        alert.setHeaderText("EingabeFehler Schadensfall");
+			        alert.showAndWait();
+				}
 			}
 		}); 
 	}
