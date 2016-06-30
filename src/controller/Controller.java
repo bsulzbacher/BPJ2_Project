@@ -149,28 +149,54 @@ public class Controller {
 		// TODO Isabella
 		
 	}
-
-	protected void erteileAuftrag(final MainView main) throws SQLException {
-		// TOODO Hary
-		//main.alleKVs();
-//		main.setKostenvoranschlagList(FXCollections.observableArrayList(connection.getAllKostenvoranschlag()));
-//		main.setMatList(FXCollections.observableArrayList(connection.getAllMaterial()));
-//		main.zeichneKostenvoranschlag();
-//		
-//		main.getButtonMatHinzu().setOnAction(new EventHandler<ActionEvent>() {
-//
-//			public void handle(ActionEvent arg0) {
-//				Material neuMat=main.getMatBox().getSelectionModel().getSelectedItem();
-//				counterKvPos++;
-//				KvItem item=new KvItem(counterKvPos, neuMat.getMaterialName(), neuMat.getVkPreis(),Integer.parseInt(main.getAnzMat().getText()));
-//				main.getKvList().add(item);
-//				main.setGesamtSumKv(main.getGesamtSumKv()+item.getSumme());
-//				main.refreshKVsum();
-//			}
-//		}); 
-	}
-		
 	
+	//HARY START
+	private void erteileAuftrag(final MainView main) throws SQLException {
+	
+		main.getKostenvoranschlagList().clear();
+		main.setKostenvoranschlagList(FXCollections.observableArrayList(connection.getAllKostenvoranschlaege()));
+		// -> Bräuchte getAllKostenvoranschlaege in ConnectionHelper als Drop down
+		//also eine setKvList(FX.Collections.observableArrayList(connection.getAllKostenvoranschlaege)
+		// wie kann ich einstellen, dass ich die KVs nur im richtigen Status kriege?
+	
+		main.zeichneKostenvoranschlag(); // nötig?
+		final Alert alert = new Alert(AlertType.INFORMATION);
+
+		
+		main.getKvSubmit().setOnAction(new EventHandler<ActionEvent>() { //main.getErteileAuftrag
+			public void handle(ActionEvent arg0) {
+				Schadensfall sf=main.getSfBox().getSelectionModel().getSelectedItem();  //Auftrag statt Schadensfall // "sfBox?"
+				
+				if (sf!=null){
+					if (!main.getKvList().isEmpty()){
+						try {
+							connection.writeKv(sf.getIdSchadensfall(), main.getKvList()); //writeAuftrag(sf.getKVID) ->
+							alert.setContentText("Fertig");
+							alert.setTitle("Auftrag erteilt"); //auftrag erteilt
+							alert.setHeaderText("wurde in einen Auftrag umgewandelt!"); 
+							alert.showAndWait();
+							erteileAuftrag(main); // erstelleAuftrag(main)
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else{
+						alert.setContentText("Probleme mit dem Auftrag!"); // Probleme mit dem Auftrag
+						alert.setTitle("Fehler");
+						alert.setHeaderText("Beim Admin melden");
+						alert.showAndWait();
+					}
+					
+				} else {
+					alert.setContentText("Kostenvoranschlag auswählen!");  //KV Auswählen
+			        alert.setTitle("Fehler");
+			        alert.setHeaderText("EingabeFehler Kostenvoranschlag");
+			        alert.showAndWait();
+				}
+			}
+		}); 
+	}		
+//HARY ENDE
 
 	private void erstelleKostenvoranschlag(final MainView main) throws SQLException {
 		// TODO Max

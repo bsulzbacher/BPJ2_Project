@@ -5,6 +5,8 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import javafx.collections.ObservableList;
+import javafx.util.Callback;
+import model.Kostenvoranschlag;
 import model.KvItem;
 import model.Material;
 import model.Mitarbeiter;
@@ -92,6 +94,37 @@ public class ConnectionHelper {
 		return allMaterialList;
 	}
 	
+	//HARY START
+	public ArrayList<Kostenvoranschlag> getAllKostenvoranschlaege()throws SQLException {
+		PreparedStatement stmt = connection.prepareStatement
+				("select kv.idKV as KVID, Name, sf.Beschreibung,"  
+		         +"sf.Schadendatum as Schadensdatum, sum(m.VKPreis*v.verranschlagt) as Summe" 
+		         + "from Schadensfall sf" 
+		         +"join Geschädigte g on sf.idSchadensfall = g.SchadensfallID" 
+		         +"join Kostenvoranschlag kv on kv.idSchadensfall = sf.idSchadensfall" 
+		         +"join Stammdaten s on g.PersonenID = s.idPerson" 
+		         +"join Verbrauch v on sf.idSchadensfall = v.idSchadensfall" 
+		         +"join Material m on m.idMaterial = v.idMaterial" 
+		         +"where Status = 'Neu' group by kv.idKV; ");  //SQL Schreiben!!
+		ResultSet rs= stmt.executeQuery();
+		
+		ArrayList<Kostenvoranschlag> allKostenvoranschlaegeList = new ArrayList<Kostenvoranschlag>();
+		
+		while(rs.next()) {
+			int idKV=rs.getInt("kv.idKV");				//Korrekte Variablen!
+			String beschreibung=rs.getString("sf.Beschreibung");
+			Date schadendatum=rs.getDate("sf.Schadendatum");
+			double summe=rs.getDouble("Summe");
+			String status = rs.getString("Status");
+			
+			allKostenvoranschlaegeList.add(new Kostenvoranschlag(idKV, beschreibung, schadendatum, summe, status));
+		}
+		
+		return allKostenvoranschlaegeList;
+	}
+	//HARY ENDE
+	
+	
 	public void writeKv(int idSchaden, ObservableList<KvItem> kvItems) throws SQLException{
 		Statement wrKV = connection.createStatement();
 		String query;
@@ -109,10 +142,27 @@ public class ConnectionHelper {
 			query="insert into Verbrauch (idSchadensfall,idMaterial,idKV,verranschlagt) values ("+idSchaden+","+i.getIdMaterial()+","+kvId+","+i.getAnzahl()+");";
 			wrKV.executeUpdate(query);
 		}
-		
-	
+		}
+		// HARY START
+	public void updateKv(int idSchaden, ObservableList<KvItem> kvItems) throws SQLException{
+		Statement wrKV = connection.createStatement();			String query;
+			query="update Kostenvoranschlag(Freigegeben) set ('nein')"; 
+			wrKV.executeUpdate(query);
+			
+			PreparedStatement read=connection.prepareStatement("SELECT verranschlagt FROM Verbrauch;");
+			ResultSet rs=read.executeQuery();
+			int Varverbraucht=rs.getInt("verranschlagt");			
+				
+			
+			for (KvItem i:kvItems){
+				query="update Verbrauch (verbraucht) set ("+Varverbraucht+")";
+				wrKV.executeUpdate(query);
+			}
+	//HARY ENDE
 		
 	}
+
+	
 	
 	
 }

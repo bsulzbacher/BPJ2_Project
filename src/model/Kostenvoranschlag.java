@@ -1,49 +1,40 @@
 package model;
 
+import java.util.Date;
+
 public class Kostenvoranschlag {
 	private int idKV;
-	private String schadenart;
-	private double vkPreis;
-	private int verranschlagt;
-	private double summe;
+	//private String schadenart;
+	//private double vkPreis;
+	//private int verranschlagt;
 	private String beschreibung;
+	private Date schadendatum;
+	private double summe;
 	private String status;
 	
-	public Kostenvoranschlag(int idKV, String schadenart, double vkPreis, int verranschlagt, double summe,
-			String beschreibung, String status) {
+	public Kostenvoranschlag(int idKV, String beschreibung, Date schadendatum, double summe, String status) {
 		super();
 		this.idKV = idKV;
-		this.schadenart = schadenart;
-		this.vkPreis = vkPreis;
-		this.verranschlagt = verranschlagt;
-		summe = vkPreis*verranschlagt;
 		this.beschreibung = beschreibung;
+		this.schadendatum = schadendatum;
+		this.summe = summe;
 		this.status = status;
-		summe = vkPreis*verranschlagt;
 	}
 
 	public int getIdKV() {
 		return idKV;
 	}
 
-	public String getSchadenart() {
-		return schadenart;
+	public String getBeschreibung() {
+		return beschreibung;
 	}
 
-	public double getVkPreis() {
-		return vkPreis;
-	}
-
-	public int getVerranschlagt() {
-		return verranschlagt;
+	public Date getSchadendatum() {
+		return schadendatum;
 	}
 
 	public double getSumme() {
 		return summe;
-	}
-
-	public String getBeschreibung() {
-		return beschreibung;
 	}
 
 	public String getStatus() {
@@ -51,6 +42,8 @@ public class Kostenvoranschlag {
 	}
 	
 	
+	
+
 	
 	
 	

@@ -8,6 +8,7 @@ import model.Mitarbeiter;
 import model.Person;
 import model.Schadensfall;
 import model.Material;
+import model.Kostenvoranschlag;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -56,22 +57,10 @@ public class MainView{
 	private ObservableList<Material> matList = FXCollections.observableArrayList();
 	private ObservableList<KvItem> kvList = FXCollections.observableArrayList();
 	
-	//HARY Start
-//	
-//	private ObservableList<Kostenvoranschlag> kostenvoranschlagList = FXCollections.observableArrayList();
-//	
-//	public ObservableList<Kostenvoranschlag> getKostenvoranschlagList() {
-//		return kostenvoranschlagList;
-//	}
-//
-//	public void setKostenvoranschlagList(ObservableList<Kostenvoranschlag> kostenvoranschlagList) {
-//		this.kostenvoranschlagList = kostenvoranschlagList;
-//	}
+	//HARY START
+	private ObservableList<Kostenvoranschlag> kostenvoranschlagList = FXCollections.observableArrayList();
+	//HARY END
 	
-	
-	
-	//HARY End
-
 	private TableView tab;
 	private TextField anzMat;
 	private Button matHinzu;
@@ -281,6 +270,15 @@ public class MainView{
 	public void setGesamtSumKv(double gesamtSumKv) {
 		this.gesamtSumKv= gesamtSumKv;
 	}
+	
+	//HARY START
+	public ObservableList<Kostenvoranschlag> getKostenvoranschlagList() {
+		return kostenvoranschlagList;
+	}
+	public void setKostenvoranschlagList(ObservableList<Kostenvoranschlag> kostenvoranschlagList) {
+		this.kostenvoranschlagList = kostenvoranschlagList;
+	}
+	//HARY ENDE
 
 	public void refreshKVsum() {
 		KVsum.setText(Double.toString(gesamtSumKv));
