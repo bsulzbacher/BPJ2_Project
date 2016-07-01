@@ -14,12 +14,15 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.stage.Stage;
+import model.Adresse;
 import model.KvItem;
 import model.Mitarbeiter;
+import model.Person;
 import model.Schadensfall;
 import model.Material;
 import utils.ConnectionHelper;
@@ -273,8 +276,42 @@ public class Controller {
 		}); 
 	}
 
-	private void erfasseSchadensfall(MainView main) throws SQLException {
+	private void erfasseSchadensfall(final MainView main) throws SQLException {
 		// TODO Philipp
+		
+		main.getSchErfOkAndSave().setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent arg0) {
+				final Alert alert = new Alert(AlertType.INFORMATION);
+				Mitarbeiter bearbeitenderMA = main.getMitarbeiterComboBox().getSelectionModel().getSelectedItem();
+				Adresse schAdresse = main.getSchadensadresseComboBox().getSelectionModel().getSelectedItem();
+				Person geschaedigter  = main.getGeschaedigterComboBox().getSelectionModel().getSelectedItem();
+				boolean fehlendeEingabedaten = false;
+				
+				if(!fehlendeEingabedaten && bearbeitenderMA == null){
+					alert.setContentText("Kein Mitarbeiter angegeben!");
+					fehlendeEingabedaten  = true;
+				}
+				
+				if(!fehlendeEingabedaten && geschaedigter == null){
+					alert.setContentText("Kein Geschaedigter angegeben!");
+			        fehlendeEingabedaten = true;
+				}
+				
+				if(!fehlendeEingabedaten && schAdresse == null){
+					alert.setContentText("Keine Schadensfalladresse angegeben!");
+					fehlendeEingabedaten  = true;
+				}
+				
+				if(fehlendeEingabedaten){
+				
+			        alert.setTitle("Fehler");
+			        alert.setHeaderText("Fehlende Eingabedaten!");
+			        alert.showAndWait();
+			        return;
+				
+		 	    }
+			}
+		});
 		main.setMAList(FXCollections.observableArrayList(connection.getAllMitarbeiter()));
 		main.setGSList(FXCollections.observableArrayList(connection.getAllGeschaedigte()));
 		main.setAdresseList(FXCollections.observableArrayList(connection.getAllAdresses()));

@@ -54,13 +54,22 @@ public class MainView{
 	private ObservableList<Person> GSList = FXCollections.observableArrayList();
 	private ObservableList<Mitarbeiter> MAList = FXCollections.observableArrayList();
 	private ObservableList<Adresse> AdresseList = FXCollections.observableArrayList();
+	private ComboBox<Person> geschaedigterComboBox;
+
+	private ComboBox<Mitarbeiter> mitarbeiterComboBox;
+	private ComboBox<Adresse> schadensadresseComboBox;
 	
 	private ChoiceBox<Schadensfall> sfBox;
 	private ChoiceBox<Material> matBox;
 	private ObservableList<Schadensfall> sfList = FXCollections.observableArrayList();
 	private ObservableList<Material> matList = FXCollections.observableArrayList();
 	private ObservableList<KvItem> kvList = FXCollections.observableArrayList();
+	Button SchErfOkAndSave = new Button();
 	
+	public Button getSchErfOkAndSave() {
+		return SchErfOkAndSave;
+	}
+
 	//HARY START
 	private ObservableList<Kostenvoranschlag> kostenvoranschlagList = FXCollections.observableArrayList();
 	//HARY END
@@ -333,14 +342,13 @@ public class MainView{
 		TextField schadensdatumText = new TextField();
 		TextField extSchadensnummerText = new TextField();
 		TextArea beschreibungText = new TextArea();
-		Button okAndSaveButton = new Button();
-		okAndSaveButton.setText("OK und Speichern");
+		SchErfOkAndSave.setText("OK und Speichern");
 		//beschreibungText.setMinSize(500, 200);
 		//beschreibungText.setWr
 		
-		ComboBox<Person> geschaedigterComboBox = new ComboBox<Person>(GSList);
-		ComboBox<Mitarbeiter> mitarbeiterComboBox = new ComboBox<Mitarbeiter>(MAList);
-		ComboBox<Adresse> schadensadresseComboBox = new ComboBox<Adresse>(AdresseList);
+		geschaedigterComboBox = new ComboBox<Person>(GSList);
+		mitarbeiterComboBox = new ComboBox<Mitarbeiter>(MAList);
+		schadensadresseComboBox = new ComboBox<Adresse>(AdresseList);
 		TextField schadensartText = new TextField();
 				
 		//MAList.setAll(col);
@@ -368,7 +376,7 @@ public class MainView{
 		gridSchadensfall.add(beschreibungLabel, 0,7);
 		gridSchadensfall.add(beschreibungText,1,7,5,1);
 		
-		gridSchadensfall.add(okAndSaveButton, 3, 8,4,1);
+		gridSchadensfall.add(SchErfOkAndSave, 3, 8,4,1);
 		
 		root.getChildren().add(gridSchadensfall);
 	}
@@ -389,6 +397,19 @@ public class MainView{
 		String text = "Sie sind angemeldet als " + name; 
 		this.mitarbeiterBezeichnung.setText(text);
 	}
+	
+	public ComboBox<Person> getGeschaedigterComboBox() {
+		return geschaedigterComboBox;
+	}
+
+	public ComboBox<Mitarbeiter> getMitarbeiterComboBox() {
+		return mitarbeiterComboBox;
+	}
+
+	public ComboBox<Adresse> getSchadensadresseComboBox() {
+		return schadensadresseComboBox;
+	}
+	
 }
 	
 	
