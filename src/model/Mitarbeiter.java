@@ -23,4 +23,7 @@ public class Mitarbeiter extends Person{
 		return email;
 	}
 	
+	public String getMitarbeiterBezeichnung() {
+		return this.getVorname() + " " + this.getNachname();
+	}
 }

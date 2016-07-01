@@ -22,8 +22,9 @@ public class ConnectionHelper {
 	
 	//Auslesen der Stammdaten aus der Datenbank, für die Authentifizierung bei der Anmeldung
 	public Mitarbeiter checkLoginDaten(String benutzername, String passwort) throws SQLException {
-		PreparedStatement stmt = connection.prepareStatement("SELECT idPerson, vorname, name, email FROM Stammdaten where email = ?");
+		PreparedStatement stmt = connection.prepareStatement("SELECT idPerson, vorname, name, email FROM Stammdaten where PersonalNr = ? and PW = ?");
 		stmt.setString(1,benutzername);
+		stmt.setString(2, passwort);
 		ResultSet rs= stmt.executeQuery();
 		Mitarbeiter mitarbeiter = null;
 		int id = 0;
@@ -44,7 +45,24 @@ public class ConnectionHelper {
 		}*/
 		if(id != 0 && vorname.length() != 0 && nachname.length() != 0 && email.length() != 0)
 			mitarbeiter = new Mitarbeiter(vorname, nachname, id, email);
-		return mitarbeiter;
+		if(mitarbeiter != null) {
+		setLastLogin(mitarbeiter);
+	}
+	return mitarbeiter;
+}
+
+	public void setLastLogin(Mitarbeiter mitarbeiter) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("UPDATE Stammdaten set last_log = ? where idPerson = ?");
+		
+		Date CreatedDate= new Date(System.currentTimeMillis());
+		java.util.Date d = new java.util.Date();
+		long t = d.getTime();
+		Timestamp time = new Timestamp(t);
+		statement.setTimestamp(1, time);
+		statement.setInt(2, mitarbeiter.getMitarbeiter_ID());
+		//String query ="UPDATE Stammdaten set last_log = " + time + " where idPerson = " + mitarbeiter.getMitarbeiter_ID(); 
+		//System.out.println(query);
+		statement.executeUpdate();
 	}
 	
 	public ArrayList<Mitarbeiter> getAllMitarbeiter() throws SQLException {

@@ -96,6 +96,7 @@ public class Controller {
 	public void showMainView(Stage stage) throws ClassNotFoundException, IOException, SQLException {
 		final MainView main = new MainView();
 		main.showMainView(stage);
+		main.showBenutzerdaten(mitarbeiter.getMitarbeiterBezeichnung());
 		//Bei Klick auf den Testbutton wird die Funktion aus der Klasse
 		//MainView.java aufgerufen, um eine Inhalt im mittleren Bereich des Fensters anzuzeigen
 		// Hinzufügen eines Events bei Klick auf den Button "Anmelden

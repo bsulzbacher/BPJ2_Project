@@ -47,7 +47,7 @@ public class MainView{
 	private Button button5;
 	private TextField textField;
 	private Button speicherKostenvoranschlag;
-
+	private Label mitarbeiterBezeichnung;
 	private ObservableList<Person> GSList = FXCollections.observableArrayList();
 	private ObservableList<Mitarbeiter> MAList = FXCollections.observableArrayList();
 	
@@ -84,15 +84,19 @@ public class MainView{
 		root.getStyleClass().add("middle");
 		
 		// Panel für den oberen Bereich
-		FlowPane flow = new FlowPane();
+		BorderPane flow = new BorderPane();
 		flow.setPadding(new Insets(10, 10, 10, 10));
 		flow.getStyleClass().add("top");
-		flow.setHgap(5);
+		//flow.setHgap(5);
 		// erstellen des Logos und hinzufügen zum oberen Panel
         final ImageView selectedImage = new ImageView();   
         Image image1 = new Image(MainView.class.getResourceAsStream("../images/logo.jpg"));
         selectedImage.setImage(image1);
-        flow.getChildren().addAll(selectedImage);
+        mitarbeiterBezeichnung = new Label("");
+        mitarbeiterBezeichnung.setId("user");
+		flow.setLeft(selectedImage);
+		flow.setBottom(mitarbeiterBezeichnung);
+		BorderPane.setAlignment(mitarbeiterBezeichnung, Pos.BOTTOM_RIGHT);
 		
 		// Panel für den linken Bereich (Menüpunkte)
 		AnchorPane anchorpane = new AnchorPane();
@@ -372,7 +376,10 @@ public class MainView{
 		MAList = mAList;
 	}
 
-
+	public void showBenutzerdaten(String name) {
+		String text = "Sie sind angemeldet als " + name; 
+		this.mitarbeiterBezeichnung.setText(text);
+	}
 }
 	
 	
