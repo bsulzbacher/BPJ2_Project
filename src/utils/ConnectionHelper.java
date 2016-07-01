@@ -10,6 +10,7 @@ import model.Kostenvoranschlag;
 import model.KvItem;
 import model.Material;
 import model.Mitarbeiter;
+import model.Person;
 import model.Schadensfall;
 
 public class ConnectionHelper {
@@ -180,7 +181,18 @@ public class ConnectionHelper {
 		
 	}
 
-	
+	public ArrayList<Person> getAllGeschaedigte() throws SQLException {
+		PreparedStatement stmt = connection.prepareStatement("SELECT idPerson, vorname, name, email FROM Stammdaten WHERE Typ = 'Geschaedigte' ");
+		ResultSet rs= stmt.executeQuery();
+		
+		ArrayList<Person> allGeschaedigteList = new ArrayList<Person>();
+		
+		while(rs.next()) {
+			allGeschaedigteList.add(new Person(rs.getString("vorname"),rs.getString("name")));
+		}
+		
+		return allGeschaedigteList;
+	}
 	
 	
 }
