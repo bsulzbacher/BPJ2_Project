@@ -106,7 +106,6 @@ public class ConnectionHelper {
 			int idMaterial=rs.getInt("idMaterial");
 			String name=rs.getString("Kategorie")+" "+rs.getString("materialName");
 			double vkPreis=rs.getDouble("VKPReis");
-			
 			allMaterialList.add(new Material(idMaterial,name,vkPreis));
 		}
 		
@@ -116,31 +115,69 @@ public class ConnectionHelper {
 	//HARY START
 	public ArrayList<Kostenvoranschlag> getAllKostenvoranschlaege()throws SQLException {
 		PreparedStatement stmt = connection.prepareStatement
-				("select kv.idKV as KVID, Name, sf.Beschreibung,"  
-		         +"sf.Schadendatum as Schadensdatum, sum(m.VKPreis*v.verranschlagt) as Summe" 
-		         + "from Schadensfall sf" 
-		         +"join Geschaedigte g on sf.idSchadensfall = g.SchadensfallID" 
-		         +"join Kostenvoranschlag kv on kv.idSchadensfall = sf.idSchadensfall" 
-		         +"join Stammdaten s on g.PersonenID = s.idPerson" 
-		         +"join Verbrauch v on sf.idSchadensfall = v.idSchadensfall" 
-		         +"join Material m on m.idMaterial = v.idMaterial" 
-		         +"where Status = 'Neu' group by kv.idKV; ");  //SQL Schreiben!!
+				("Select kv.idKV as KVID,a.strasse,a.ort ,s.Name, sf.Beschreibung, sf.Schadendatum as Schadensdatum, sum(distinct m.VKPreis*v.verranschlagt) as Summe"
+						+" from Schadensfall sf "
+						+" join Geschaedigte g on sf.idSchadensfall = g.SchadensfallID "
+						+" join Kostenvoranschlag kv on kv.idSchadensfall = sf.idSchadensfall" 
+						+" join Stammdaten s on g.PersonenID = s.idPerson "
+						+" join Verbrauch v on kv.idKV = v.idKV"
+						+" join Material m on m.idMaterial = v.idMaterial "
+						+" join Adresse a on sf.idAdresse=a.idAdresse"
+						+" where kv.Freigegeben='nein'"
+						+" group by  kv.idKV, sf.Beschreibung, sf.Schadendatum ;");
 		ResultSet rs= stmt.executeQuery();
 		
 		ArrayList<Kostenvoranschlag> allKostenvoranschlaegeList = new ArrayList<Kostenvoranschlag>();
 		
 		while(rs.next()) {
-			int idKV=rs.getInt("kv.idKV");				//Korrekte Variablen!
-			String beschreibung=rs.getString("sf.Beschreibung");
-			Date schadendatum=rs.getDate("sf.Schadendatum");
+			int idKV=rs.getInt("KVID");				//Korrekte Variablen!
+			String beschreibung=rs.getString("name")+" - "+rs.getString("strasse")+" - "+rs.getString("ort");
+			Date schadendatum=rs.getDate("Schadensdatum");
 			double summe=rs.getDouble("Summe");
-			String status = rs.getString("Status");
+			//String status = rs.getString("Status");
 			
-			allKostenvoranschlaegeList.add(new Kostenvoranschlag(idKV, beschreibung, schadendatum, summe, status));
+			allKostenvoranschlaegeList.add(new Kostenvoranschlag(idKV, beschreibung, schadendatum, summe));
 		}
 		
 		return allKostenvoranschlaegeList;
 	}
+	
+	public ArrayList<KvItem> getAllKvItems(int KVid)throws SQLException {
+		PreparedStatement stmt = connection.prepareStatement
+				("SELECT mat.idMaterial, mat.Kategorie,  mat.materialName, mat.VKPreis, ver.verranschlagt FROM Material mat " 
+						+ " inner join Verbrauch ver on mat.idMaterial=ver.idMaterial"
+						+" where ver.idKV="+KVid+";");
+		ResultSet rs= stmt.executeQuery();
+		
+		ArrayList<KvItem> allKvItems = new ArrayList<KvItem>();
+		int counter=0;
+		while(rs.next()) {
+			counter++;
+			int idMaterial=rs.getInt("idMaterial");				//Korrekte Variablen!
+			String matName=rs.getString("Kategorie")+" "+rs.getString("materialName");
+			double vkPreis=rs.getDouble("VKPReis");
+			int anzahl=rs.getInt("verranschlagt");
+			
+			allKvItems.add(new KvItem(counter, idMaterial, matName, vkPreis, anzahl));
+		}
+		
+		return allKvItems;
+	}
+	
+	public double getKVsum(int KVid)throws SQLException {
+		double kvSum=0;
+		PreparedStatement stmt = connection.prepareStatement
+				("Select sum(m.VKPreis*v.verranschlagt) as sum from Verbrauch v "
+						+"inner join Material m on v.idMaterial=m.idMaterial where idKV="+KVid+";");
+		ResultSet rs= stmt.executeQuery();
+		while(rs.next()){
+			kvSum=rs.getDouble("sum");
+		}
+		
+		
+		return kvSum;
+	}
+
 	//HARY ENDE
 	
 	
@@ -163,20 +200,12 @@ public class ConnectionHelper {
 		}
 		}
 		// HARY START
-	public void updateKv(int idSchaden, ObservableList<KvItem> kvItems) throws SQLException{
-		Statement wrKV = connection.createStatement();			String query;
-			query="update Kostenvoranschlag(Freigegeben) set ('nein')"; 
-			wrKV.executeUpdate(query);
-			
-			PreparedStatement read=connection.prepareStatement("SELECT verranschlagt FROM Verbrauch;");
-			ResultSet rs=read.executeQuery();
-			int Varverbraucht=rs.getInt("verranschlagt");			
-				
-			
-			for (KvItem i:kvItems){
-				query="update Verbrauch (verbraucht) set ("+Varverbraucht+")";
-				wrKV.executeUpdate(query);
-			}
+	public void updateKv(int idSchaden, String status) throws SQLException{
+		Statement wrKV = connection.createStatement();			
+		String query="update Kostenvoranschlag set Freigegeben='"+status.toString()+
+				"' where idKV="+idSchaden+";"; 
+		wrKV.executeUpdate(query);
+
 	//HARY ENDE
 		
 	}

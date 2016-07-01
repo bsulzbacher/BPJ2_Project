@@ -59,6 +59,9 @@ public class MainView{
 	
 	//HARY START
 	private ObservableList<Kostenvoranschlag> kostenvoranschlagList = FXCollections.observableArrayList();
+	private ChoiceBox<Kostenvoranschlag> kvBox;
+	private Button auftStorn;
+	private Button auftErt;
 	//HARY END
 	
 	private TableView tab;
@@ -282,6 +285,88 @@ public class MainView{
 	public void setKostenvoranschlagList(ObservableList<Kostenvoranschlag> kostenvoranschlagList) {
 		this.kostenvoranschlagList = kostenvoranschlagList;
 	}
+	
+	public void auftragserteilung(){
+		root.getChildren().clear();
+		BorderPane border=new BorderPane();
+		
+		GridPane grid = new GridPane();
+		grid.setHgap(20);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(0,20,0,20));
+	
+		//grid.setGridLinesVisible(true); //zeichnet mir die Grid zum besseren ausrichten
+		Label t1 =new Label("Wähle Kostenvoranschlag");
+		t1.setPrefWidth(200);
+		grid.add(t1,0,0);
+		kvBox = new ChoiceBox<Kostenvoranschlag>(kostenvoranschlagList);
+		kvBox.setMinWidth(200);
+		grid.add(kvBox, 1,0);
+	
+	
+		border.setTop(grid);
+	
+		//Mittelteil
+	
+		GridPane mid=new GridPane();
+		mid.setPadding(new Insets(0,20,0,20));
+		tab=new TableView();
+	
+
+		TableColumn posCol = new TableColumn("Pos");
+		posCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("pos".toString()));
+		TableColumn matCol = new TableColumn("Material");
+		matCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("matName"));
+		TableColumn epCol = new TableColumn("Einzelpreis");
+		epCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("vkPreis".toString()));
+		TableColumn anzCol = new TableColumn("Anzahl");
+		anzCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("anzahl".toString()));
+		TableColumn sumCol = new TableColumn ("Preis Summe");
+		sumCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("summe".toString()));
+    
+		posCol.setMaxWidth(50);
+		matCol.setMinWidth(300);
+		matCol.setMaxWidth(1000);
+    
+		tab.getColumns().addAll(posCol, matCol, epCol, anzCol, sumCol);
+		tab.setItems(kvList);
+		final VBox vbox = new VBox();
+		vbox.setSpacing(5);
+		vbox.setPadding(new Insets(10, 0, 0, 10));
+		vbox.getChildren().addAll( tab);
+		mid.add(vbox, 0,0);
+		border.setCenter(mid);
+	
+		///unten
+	
+		HBox box=new HBox();
+		box.setPadding(new Insets(10,10,10,10));
+		box.setAlignment(Pos.CENTER_RIGHT);
+	
+		Label t4=new Label("Gesamtsumme: ");
+		KVsum=new Label(Double.toString(gesamtSumKv));
+		Label t5=new Label(" € ");
+		auftStorn=new Button("Auftrag stornieren");
+		auftErt=new Button("Auftrag erteilen");
+		box.getChildren().addAll(t4,KVsum,t5,auftStorn,auftErt);		
+		mid.add(box, 0, 1);
+
+		root.getChildren().add(border);
+	}
+
+	public Button getAuftErt() {
+		return auftErt;
+	}
+
+	public Button getAuftStorn() {
+		return auftStorn;
+	}
+
+	public ChoiceBox<Kostenvoranschlag> getKvBox() {
+		return kvBox;
+	}	
+
+
 	//HARY ENDE
 
 	public void refreshKVsum() {

@@ -12,13 +12,13 @@ public class Kostenvoranschlag {
 	private double summe;
 	private String status;
 	
-	public Kostenvoranschlag(int idKV, String beschreibung, Date schadendatum, double summe, String status) {
+	public Kostenvoranschlag(int idKV, String beschreibung, Date schadendatum, double summe) {
 		super();
 		this.idKV = idKV;
 		this.beschreibung = beschreibung;
 		this.schadendatum = schadendatum;
 		this.summe = summe;
-		this.status = status;
+
 	}
 
 	public int getIdKV() {
@@ -39,6 +39,11 @@ public class Kostenvoranschlag {
 
 	public String getStatus() {
 		return status;
+	}
+
+	@Override
+	public String toString() {
+		return idKV + " - " + beschreibung + " - " + summe ;
 	}
 	
 	

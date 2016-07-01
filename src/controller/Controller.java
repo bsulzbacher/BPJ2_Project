@@ -7,9 +7,8 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 
-
-
-import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,6 +17,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.stage.Stage;
+import model.Kostenvoranschlag;
 import model.KvItem;
 import model.Mitarbeiter;
 import model.Schadensfall;
@@ -152,52 +152,87 @@ public class Controller {
 	}
 	
 	//HARY START
-	private void erteileAuftrag(final MainView main) throws SQLException {
-	
-		main.getKostenvoranschlagList().clear();
-		main.setKostenvoranschlagList(FXCollections.observableArrayList(connection.getAllKostenvoranschlaege()));
-		// -> Bräuchte getAllKostenvoranschlaege in ConnectionHelper als Drop down
-		//also eine setKvList(FX.Collections.observableArrayList(connection.getAllKostenvoranschlaege)
-		// wie kann ich einstellen, dass ich die KVs nur im richtigen Status kriege?
-	
-		main.zeichneKostenvoranschlag(); // nötig?
-		final Alert alert = new Alert(AlertType.INFORMATION);
+		private void erteileAuftrag(final MainView main) throws SQLException {
+			final Alert alert = new Alert(AlertType.INFORMATION);
+			main.getKostenvoranschlagList().clear();
+			main.getKvList().clear();
+			main.setGesamtSumKv(0);
+			main.setKostenvoranschlagList(FXCollections.observableArrayList(connection.getAllKostenvoranschlaege()));
+			main.auftragserteilung();
 
-		
-		main.getKvSubmit().setOnAction(new EventHandler<ActionEvent>() { //main.getErteileAuftrag
-			public void handle(ActionEvent arg0) {
-				Schadensfall sf=main.getSfBox().getSelectionModel().getSelectedItem();  //Auftrag statt Schadensfall // "sfBox?"
-				
-				if (sf!=null){
-					if (!main.getKvList().isEmpty()){
+			main.getKvBox().getSelectionModel().selectedItemProperty().addListener(
+					new ChangeListener<Kostenvoranschlag>(){
+
+						public void changed(ObservableValue<? extends Kostenvoranschlag> observable,
+								Kostenvoranschlag oldValue, Kostenvoranschlag newValue) {
+							try {
+								//main.getKvBox().get
+								main.getKvList().setAll(connection.getAllKvItems(newValue.getIdKV()));
+								main.setGesamtSumKv(connection.getKVsum(newValue.getIdKV()));
+								main.refreshKVsum();
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					});
+			
+			main.getAuftErt().setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent arg0) {
+					if (main.getKvBox().getSelectionModel().getSelectedItem()!=null){
 						try {
-							connection.writeKv(sf.getIdSchadensfall(), main.getKvList()); //writeAuftrag(sf.getKVID) ->
-							alert.setContentText("Fertig");
-							alert.setTitle("Auftrag erteilt"); //auftrag erteilt
-							alert.setHeaderText("wurde in einen Auftrag umgewandelt!"); 
-							alert.showAndWait();
-							erteileAuftrag(main); // erstelleAuftrag(main)
+							connection.updateKv(main.getKvBox().getSelectionModel().getSelectedItem().getIdKV(),
+									"ja");
+							alert.setContentText("Die Beauftragung ist erfogt!");
+					        alert.setTitle("Bearbeitung durchgeführt");
+					        alert.setHeaderText("");
+					        alert.showAndWait();
+					        erteileAuftrag(main);
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					} else{
-						alert.setContentText("Probleme mit dem Auftrag!"); // Probleme mit dem Auftrag
-						alert.setTitle("Fehler");
-						alert.setHeaderText("Beim Admin melden");
-						alert.showAndWait();
+						
+					}else {
+						alert.setContentText("Kein Schadensfall ausgewählt");
+				        alert.setTitle("Fehler");
+				        alert.setHeaderText("Fehler");
+				        alert.showAndWait();
 					}
+						
 					
-				} else {
-					alert.setContentText("Kostenvoranschlag auswählen!");  //KV Auswählen
-			        alert.setTitle("Fehler");
-			        alert.setHeaderText("EingabeFehler Kostenvoranschlag");
-			        alert.showAndWait();
-				}
-			}
-		}); 
-	}		
-//HARY ENDE
+				}	
+			});
+			
+			main.getAuftStorn().setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent arg0) {
+					if (main.getKvBox().getSelectionModel().getSelectedItem()!=null){
+						try {
+							connection.updateKv(main.getKvBox().getSelectionModel().getSelectedItem().getIdKV(),
+									"abgelehnt");
+							alert.setContentText("Der Auftrag wurde storniert!");
+					        alert.setTitle("Bearbeitung durchgeführt");
+					        alert.setHeaderText("");
+					        alert.showAndWait();
+					        erteileAuftrag(main);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}else {
+						alert.setContentText("Kein Schadensfall ausgewählt");
+				        alert.setTitle("Fehler");
+				        alert.setHeaderText("Fehler");
+				        alert.showAndWait();
+					}
+						
+					
+				}	
+			});
+			
+		}		
+	//HARY ENDE
 
 	private void erstelleKostenvoranschlag(final MainView main) throws SQLException {
 		// TODO Max
