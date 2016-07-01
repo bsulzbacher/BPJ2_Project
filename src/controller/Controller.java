@@ -154,7 +154,6 @@ public class Controller {
 	//HARY START
 		private void erteileAuftrag(final MainView main) throws SQLException {
 			final Alert alert = new Alert(AlertType.INFORMATION);
-			main.getKostenvoranschlagList().clear();
 			main.getKvList().clear();
 			main.setGesamtSumKv(0);
 			main.setKostenvoranschlagList(FXCollections.observableArrayList(connection.getAllKostenvoranschlaege()));
@@ -166,7 +165,6 @@ public class Controller {
 						public void changed(ObservableValue<? extends Kostenvoranschlag> observable,
 								Kostenvoranschlag oldValue, Kostenvoranschlag newValue) {
 							try {
-								//main.getKvBox().get
 								main.getKvList().setAll(connection.getAllKvItems(newValue.getIdKV()));
 								main.setGesamtSumKv(connection.getKVsum(newValue.getIdKV()));
 								main.refreshKVsum();
