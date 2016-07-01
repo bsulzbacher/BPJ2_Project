@@ -43,7 +43,7 @@ public class Kostenvoranschlag {
 
 	@Override
 	public String toString() {
-		return idKV + " - " + beschreibung + " - " + summe ;
+		return idKV + " - " + beschreibung + " - EUR " + summe ;
 	}
 	
 	

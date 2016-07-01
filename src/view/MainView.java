@@ -156,14 +156,14 @@ public class MainView{
 		grid.setPadding(new Insets(0,20,0,20));
 		
 		//grid.setGridLinesVisible(true); //zeichnet mir die Grid zum besseren ausrichten
-		Label t1 =new Label("Wï¿½hle Schadensfall:");
+		Label t1 =new Label("Waehle Schadensfall:");
 		t1.setPrefWidth(200);
 		grid.add(t1,0,0);
 		sfBox = new ChoiceBox<Schadensfall>(sfList);
 		sfBox.setMinWidth(200);
 		grid.add(sfBox, 1,0);
 		
-		Label t2 =new Label("Wï¿½hle Material:");
+		Label t2 =new Label("Waehle Material:");
 		grid.add(t2, 0,1);
 		
 		matBox =new ChoiceBox<Material>(matList);
@@ -178,7 +178,7 @@ public class MainView{
 		anzMat.setMaxWidth(50);
 		grid.add(anzMat, 1, 2);
 	    
-		matHinzu=new Button("Hinzufï¿½gen");
+		matHinzu=new Button("Hinzufuegen");
 		grid.add(matHinzu, 2, 2);
 		
 		border.setTop(grid);
@@ -222,7 +222,7 @@ public class MainView{
 		
 		Label t4=new Label("Gesamtsumme: ");
 		KVsum=new Label(Double.toString(gesamtSumKv));
-		Label t5=new Label(" ï¿½ ");
+		Label t5=new Label(" EUR ");
 		kvSubmit=new Button("KV erstellen");
 		
 		box.getChildren().addAll(t4,KVsum,t5,kvSubmit);		
@@ -296,7 +296,7 @@ public class MainView{
 		grid.setPadding(new Insets(0,20,0,20));
 	
 		//grid.setGridLinesVisible(true); //zeichnet mir die Grid zum besseren ausrichten
-		Label t1 =new Label("Wähle Kostenvoranschlag");
+		Label t1 =new Label("Waehle Kostenvoranschlag");
 		t1.setPrefWidth(200);
 		grid.add(t1,0,0);
 		kvBox = new ChoiceBox<Kostenvoranschlag>(kostenvoranschlagList);
@@ -345,7 +345,7 @@ public class MainView{
 	
 		Label t4=new Label("Gesamtsumme: ");
 		KVsum=new Label(Double.toString(gesamtSumKv));
-		Label t5=new Label(" € ");
+		Label t5=new Label(" EUR ");
 		auftStorn=new Button("Auftrag stornieren");
 		auftErt=new Button("Auftrag erteilen");
 		box.getChildren().addAll(t4,KVsum,t5,auftStorn,auftErt);		
@@ -402,7 +402,7 @@ public class MainView{
 		gridSchadensfall.setHgap(10);
 		gridSchadensfall.setVgap(10);
 		gridSchadensfall.setPadding(new Insets(10,10,10,10));
-		Label geschaedigterLabel = new Label("Geschï¿½digten auswï¿½hlen:");
+		Label geschaedigterLabel = new Label("Geschaedigten auswï¿½hlen:");
 		Label mitarbeiterLabel = new Label("Mitarbeiter auswï¿½hlen:");
 		Label schadensartLabel = new Label("Schadensart:");
 		Label anlagedatumLabel = new Label("Anlagedatum:");

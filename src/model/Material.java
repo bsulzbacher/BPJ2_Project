@@ -29,7 +29,7 @@ public class Material {
 
 	@Override
 	public String toString() {
-		return materialName+" à " + vkPreis+" €" ;
+		return materialName+" à EUR " + vkPreis ;
 	}
 	
 	
