@@ -2,22 +2,22 @@ package model;
 
 public class Schadensfall {
 	private int idSchadensfall;
-	private String geschädigter;
+	private String geschaedigter;
 	private String adresse;
 	
 	
 	
-	public Schadensfall(int idSchadensfall, String geschädigter, String adresse) {
+	public Schadensfall(int idSchadensfall, String geschaedigter, String adresse) {
 		super();
 		this.idSchadensfall = idSchadensfall;
-		this.geschädigter = geschädigter;
+		this.geschaedigter = geschaedigter;
 		this.adresse = adresse;
 	}
 	public int getIdSchadensfall() {
 		return idSchadensfall;
 	}
-	public String getGeschädigter() {
-		return geschädigter;
+	public String getGeschaedigter() {
+		return geschaedigter;
 	}
 
 	public String getAdresse() {
@@ -25,7 +25,7 @@ public class Schadensfall {
 	}
 	@Override
 	public String toString() {
-		return idSchadensfall+"-"+geschädigter+"-"+adresse;
+		return idSchadensfall+"-"+geschaedigter+"-"+adresse;
 	}
 
 	

@@ -20,7 +20,7 @@ public class ConnectionHelper {
 		connection = DBConnection.getConnection();
 	}
 	
-	//Auslesen der Stammdaten aus der Datenbank, für die Authentifizierung bei der Anmeldung
+	//Auslesen der Stammdaten aus der Datenbank, fï¿½r die Authentifizierung bei der Anmeldung
 	public Mitarbeiter checkLoginDaten(String benutzername, String passwort) throws SQLException {
 		PreparedStatement stmt = connection.prepareStatement("SELECT idPerson, vorname, name, email FROM Stammdaten where PersonalNr = ? and PW = ?");
 		stmt.setString(1,benutzername);
@@ -79,7 +79,7 @@ public class ConnectionHelper {
 	}
 	
 	public ArrayList<Schadensfall> getAllSchaeden() throws SQLException {
-		PreparedStatement stmt = connection.prepareStatement("SELECT a.idSchadensfall,c.Vorname,c.Name, d.Strasse, d.Hnr, d.Ort FROM Schadensfall a inner join  Geschädigte b on a.idSchadensfall=b.SchadensfallID inner join Stammdaten c on b.PersonenId=c.idPerson inner join Adresse d on a.idAdresse=d.idAdresse");
+		PreparedStatement stmt = connection.prepareStatement("SELECT a.idSchadensfall,c.Vorname,c.Name, d.Strasse, d.Hnr, d.Ort FROM Schadensfall a inner join  Geschaedigte b on a.idSchadensfall=b.SchadensfallID inner join Stammdaten c on b.PersonenId=c.idPerson inner join Adresse d on a.idAdresse=d.idAdresse");
 		ResultSet rs= stmt.executeQuery();
 		
 		ArrayList<Schadensfall> allSchaedenList = new ArrayList<Schadensfall>();
@@ -118,7 +118,7 @@ public class ConnectionHelper {
 				("select kv.idKV as KVID, Name, sf.Beschreibung,"  
 		         +"sf.Schadendatum as Schadensdatum, sum(m.VKPreis*v.verranschlagt) as Summe" 
 		         + "from Schadensfall sf" 
-		         +"join Geschädigte g on sf.idSchadensfall = g.SchadensfallID" 
+		         +"join Geschaedigte g on sf.idSchadensfall = g.SchadensfallID" 
 		         +"join Kostenvoranschlag kv on kv.idSchadensfall = sf.idSchadensfall" 
 		         +"join Stammdaten s on g.PersonenID = s.idPerson" 
 		         +"join Verbrauch v on sf.idSchadensfall = v.idSchadensfall" 

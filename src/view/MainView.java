@@ -71,24 +71,24 @@ public class MainView{
 	// Anzeige des Hauptfensters
 	// Das Fenster besteht aus drei Bereichen (Panels):
 	// Top: Anzeige des Logos
-	// Middle: Anzeige der eigentlichen Funktionalitäten (Anzeige der Schadensfälle etc.)
-	// Left: Anzeige der Menü-Buttons
+	// Middle: Anzeige der eigentlichen Funktionalitï¿½ten (Anzeige der Schadensfï¿½lle etc.)
+	// Left: Anzeige der Menï¿½-Buttons
 	//
 	public void showMainView(Stage primaryStage){
 		Dimension screensize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		 primaryStage.setTitle("San Aid");
 		
-		// Panel für den mittleren Bereich 
+		// Panel fï¿½r den mittleren Bereich 
 		root = new StackPane();
 		root.setPadding(new Insets(15, 12, 15, 12));
 		root.getStyleClass().add("middle");
 		
-		// Panel für den oberen Bereich
+		// Panel fï¿½r den oberen Bereich
 		BorderPane flow = new BorderPane();
 		flow.setPadding(new Insets(10, 10, 10, 10));
 		flow.getStyleClass().add("top");
 		//flow.setHgap(5);
-		// erstellen des Logos und hinzufügen zum oberen Panel
+		// erstellen des Logos und hinzufï¿½gen zum oberen Panel
         final ImageView selectedImage = new ImageView();   
         Image image1 = new Image(MainView.class.getResourceAsStream("../images/logo.jpg"));
         selectedImage.setImage(image1);
@@ -98,35 +98,35 @@ public class MainView{
 		flow.setBottom(mitarbeiterBezeichnung);
 		BorderPane.setAlignment(mitarbeiterBezeichnung, Pos.BOTTOM_RIGHT);
 		
-		// Panel für den linken Bereich (Menüpunkte)
+		// Panel fï¿½r den linken Bereich (Menï¿½punkte)
 		AnchorPane anchorpane = new AnchorPane();
 		anchorpane.getStyleClass().add("left");
-		GridPane menü = new GridPane();
-		anchorpane.getChildren().addAll(menü);
+		GridPane menue = new GridPane();
+		anchorpane.getChildren().addAll(menue);
 		anchorpane.setMinSize(300, 100);
-		AnchorPane.setRightAnchor(menü, 10.0);
+		AnchorPane.setRightAnchor(menue, 10.0);
 		
 		button1 = new Button("Schaden erfassen");
 		button1.setMinSize(300, 20);
-		menü.add(button1,0,0);
+		menue.add(button1,0,0);
 		
 		button2 = new Button("Kostenvoranschlag erstellen");
 		button2.setMinSize(300, 20);
-		menü.add(button2,0,1);
+		menue.add(button2,0,1);
 		
 		button3 = new Button("Auftragserteilung");
 		button3.setMinSize(300, 20);
-		menü.add(button3,0,2);
+		menue.add(button3,0,2);
 		
 		button4 = new Button("Rechnungserstellung");
 		button4.setMinSize(300, 20);
-		menü.add(button4,0,3);
+		menue.add(button4,0,3);
 		
 		button5 = new Button("Rechnungsexport");
 		button5.setMinSize(300, 20);
-		menü.add(button5,0,4);
-		// Panel für das gesamte Fenster
-		// hinzufügen der 3 Bereiche zum ganzen Fenster
+		menue.add(button5,0,4);
+		// Panel fï¿½r das gesamte Fenster
+		// hinzufï¿½gen der 3 Bereiche zum ganzen Fenster
 		BorderPane pane = new BorderPane();
 		pane.setLeft(anchorpane);
 		pane.setCenter(root);
@@ -153,14 +153,14 @@ public class MainView{
 		grid.setPadding(new Insets(0,20,0,20));
 		
 		//grid.setGridLinesVisible(true); //zeichnet mir die Grid zum besseren ausrichten
-		Label t1 =new Label("Wähle Schadensfall:");
+		Label t1 =new Label("Wï¿½hle Schadensfall:");
 		t1.setPrefWidth(200);
 		grid.add(t1,0,0);
 		sfBox = new ChoiceBox<Schadensfall>(sfList);
 		sfBox.setMinWidth(200);
 		grid.add(sfBox, 1,0);
 		
-		Label t2 =new Label("Wähle Material:");
+		Label t2 =new Label("Wï¿½hle Material:");
 		grid.add(t2, 0,1);
 		
 		matBox =new ChoiceBox<Material>(matList);
@@ -175,7 +175,7 @@ public class MainView{
 		anzMat.setMaxWidth(50);
 		grid.add(anzMat, 1, 2);
 	    
-		matHinzu=new Button("Hinzufügen");
+		matHinzu=new Button("Hinzufï¿½gen");
 		grid.add(matHinzu, 2, 2);
 		
 		border.setTop(grid);
@@ -219,7 +219,7 @@ public class MainView{
 		
 		Label t4=new Label("Gesamtsumme: ");
 		KVsum=new Label(Double.toString(gesamtSumKv));
-		Label t5=new Label(" € ");
+		Label t5=new Label(" ï¿½ ");
 		kvSubmit=new Button("KV erstellen");
 		
 		box.getChildren().addAll(t4,KVsum,t5,kvSubmit);		
@@ -317,8 +317,8 @@ public class MainView{
 		gridSchadensfall.setHgap(10);
 		gridSchadensfall.setVgap(10);
 		gridSchadensfall.setPadding(new Insets(10,10,10,10));
-		Label geschaedigterLabel = new Label("Geschädigten auswählen:");
-		Label mitarbeiterLabel = new Label("Mitarbeiter auswählen:");
+		Label geschaedigterLabel = new Label("Geschï¿½digten auswï¿½hlen:");
+		Label mitarbeiterLabel = new Label("Mitarbeiter auswï¿½hlen:");
 		Label schadensartLabel = new Label("Schadensart:");
 		Label anlagedatumLabel = new Label("Anlagedatum:");
 		Label schadensdatumLabel = new Label("Schadensdatum:");
