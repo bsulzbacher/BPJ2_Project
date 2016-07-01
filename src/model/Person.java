@@ -19,4 +19,9 @@ public class Person {
 		return nachname;
 	}
 	
+	@Override
+	public String toString() {
+        return this.nachname + ", " + vorname; 
+    }
+	
 }

@@ -38,9 +38,9 @@ public class Controller {
 	}
 	
 	//
-	// Überprüfung der eingegebenen Logindaten 
+	// ï¿½berprï¿½fung der eingegebenen Logindaten 
 	// Aufruf der Methode checkLoginDaten() aus der Klasse ConnectionHelper.java
-	// Rückgabewert: Objekt der Klasse Mitarbeiter
+	// Rï¿½ckgabewert: Objekt der Klasse Mitarbeiter
 	//
 	public Mitarbeiter checkLogin(String benutzername, String passwort) throws SQLException {
 		Mitarbeiter mitarbeiter = null;
@@ -59,7 +59,7 @@ public class Controller {
 		final LoginView login = new LoginView();
 		login.showLogin(stage);
 		
-		// Hinzufügen eines Events bei Klick auf den Button "Anmelden
+		// Hinzufï¿½gen eines Events bei Klick auf den Button "Anmelden
 		login.getLoginButton().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
 				//Holen der eingegebenen Werte mit Getter-Methoden der Klasse LoginView.java
@@ -99,7 +99,7 @@ public class Controller {
 		main.showBenutzerdaten(mitarbeiter.getMitarbeiterBezeichnung());
 		//Bei Klick auf den Testbutton wird die Funktion aus der Klasse
 		//MainView.java aufgerufen, um eine Inhalt im mittleren Bereich des Fensters anzuzeigen
-		// Hinzufügen eines Events bei Klick auf den Button "Anmelden
+		// Hinzufï¿½gen eines Events bei Klick auf den Button "Anmelden
 		main.getButtonErfassen().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
 				try {
@@ -156,11 +156,11 @@ public class Controller {
 	
 		main.getKostenvoranschlagList().clear();
 		main.setKostenvoranschlagList(FXCollections.observableArrayList(connection.getAllKostenvoranschlaege()));
-		// -> Bräuchte getAllKostenvoranschlaege in ConnectionHelper als Drop down
+		// -> Brï¿½uchte getAllKostenvoranschlaege in ConnectionHelper als Drop down
 		//also eine setKvList(FX.Collections.observableArrayList(connection.getAllKostenvoranschlaege)
 		// wie kann ich einstellen, dass ich die KVs nur im richtigen Status kriege?
 	
-		main.zeichneKostenvoranschlag(); // nötig?
+		main.zeichneKostenvoranschlag(); // nï¿½tig?
 		final Alert alert = new Alert(AlertType.INFORMATION);
 
 		
@@ -189,7 +189,7 @@ public class Controller {
 					}
 					
 				} else {
-					alert.setContentText("Kostenvoranschlag auswählen!");  //KV Auswählen
+					alert.setContentText("Kostenvoranschlag auswï¿½hlen!");  //KV Auswï¿½hlen
 			        alert.setTitle("Fehler");
 			        alert.setHeaderText("EingabeFehler Kostenvoranschlag");
 			        alert.showAndWait();
@@ -231,7 +231,7 @@ public class Controller {
 					
 				}else{
 					   
-				        alert.setContentText("Material auswählen!");
+				        alert.setContentText("Material auswï¿½hlen!");
 				        alert.setTitle("Fehler");
 				        alert.setHeaderText("EingabeFehler Material");
 				        alert.showAndWait();
@@ -264,7 +264,7 @@ public class Controller {
 					}
 					
 				} else {
-					alert.setContentText("Schadensfall auswählen!");
+					alert.setContentText("Schadensfall auswï¿½hlen!");
 			        alert.setTitle("Fehler");
 			        alert.setHeaderText("EingabeFehler Schadensfall");
 			        alert.showAndWait();
@@ -276,6 +276,8 @@ public class Controller {
 	private void erfasseSchadensfall(MainView main) throws SQLException {
 		// TODO Philipp
 		main.setMAList(FXCollections.observableArrayList(connection.getAllMitarbeiter()));
+		main.setGSList(FXCollections.observableArrayList(connection.getAllGeschaedigte()));
+		main.setAdresseList(FXCollections.observableArrayList(connection.getAllAdresses()));
 		main.zeichneSchadenfallerfassung();
 	}
 }

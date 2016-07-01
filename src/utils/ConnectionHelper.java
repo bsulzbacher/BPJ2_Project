@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javafx.collections.ObservableList;
 import javafx.util.Callback;
+import model.Adresse;
 import model.Kostenvoranschlag;
 import model.KvItem;
 import model.Material;
@@ -182,16 +183,30 @@ public class ConnectionHelper {
 	}
 
 	public ArrayList<Person> getAllGeschaedigte() throws SQLException {
-		PreparedStatement stmt = connection.prepareStatement("SELECT idPerson, vorname, name, email FROM Stammdaten WHERE Typ = 'Geschaedigte' ");
+		PreparedStatement stmt = connection.prepareStatement("SELECT idPerson, vorname, name FROM Stammdaten WHERE Typ = 'Geschaedigter' ");
 		ResultSet rs= stmt.executeQuery();
 		
 		ArrayList<Person> allGeschaedigteList = new ArrayList<Person>();
 		
 		while(rs.next()) {
 			allGeschaedigteList.add(new Person(rs.getString("vorname"),rs.getString("name")));
+			System.out.println(rs.getString("vorname") + " " + rs.getString("name"));
 		}
 		
 		return allGeschaedigteList;
+	}
+	
+	public ArrayList<Adresse> getAllAdresses() throws SQLException {
+		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Adresse; ");
+		ResultSet rs= stmt.executeQuery();
+		
+		ArrayList<Adresse> allAdressesList = new ArrayList<Adresse>();
+		
+		while(rs.next()) {
+			allAdressesList.add(new Adresse(rs.getInt("idAdresse"),rs.getString("Strasse"), rs.getInt("Hnr"), rs.getInt("PLZ"), rs.getString("Ort")));
+		}
+		
+		return allAdressesList;
 	}
 	
 	

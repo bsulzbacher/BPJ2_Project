@@ -8,9 +8,12 @@ import model.Mitarbeiter;
 import model.Person;
 import model.Schadensfall;
 import model.Material;
+import model.Adresse;
 import model.Kostenvoranschlag;
 
 import java.awt.Dimension;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
@@ -50,6 +53,7 @@ public class MainView{
 	private Label mitarbeiterBezeichnung;
 	private ObservableList<Person> GSList = FXCollections.observableArrayList();
 	private ObservableList<Mitarbeiter> MAList = FXCollections.observableArrayList();
+	private ObservableList<Adresse> AdresseList = FXCollections.observableArrayList();
 	
 	private ChoiceBox<Schadensfall> sfBox;
 	private ChoiceBox<Material> matBox;
@@ -133,7 +137,7 @@ public class MainView{
 		pane.setTop(flow);
 
 		// Anzeige des Hauptfenster
-        Scene scene = new Scene(pane, 1024, 600);
+        Scene scene = new Scene(pane, 1200, 600);
         scene.getStylesheets().add
         (MainView.class.getResource("../style/style.css").toExternalForm());
         primaryStage.setScene(scene);
@@ -317,8 +321,8 @@ public class MainView{
 		gridSchadensfall.setHgap(10);
 		gridSchadensfall.setVgap(10);
 		gridSchadensfall.setPadding(new Insets(10,10,10,10));
-		Label geschaedigterLabel = new Label("Gesch�digten ausw�hlen:");
-		Label mitarbeiterLabel = new Label("Mitarbeiter ausw�hlen:");
+		Label geschaedigterLabel = new Label("Geschaedigten auswaehlen:");
+		Label mitarbeiterLabel = new Label("Mitarbeiter auswaehlen:");
 		Label schadensartLabel = new Label("Schadensart:");
 		Label anlagedatumLabel = new Label("Anlagedatum:");
 		Label schadensdatumLabel = new Label("Schadensdatum:");
@@ -336,11 +340,12 @@ public class MainView{
 		
 		ComboBox<Person> geschaedigterComboBox = new ComboBox<Person>(GSList);
 		ComboBox<Mitarbeiter> mitarbeiterComboBox = new ComboBox<Mitarbeiter>(MAList);
-		ComboBox schadensartComboBox = new ComboBox();
-		ComboBox schadensadresseComboBox = new ComboBox();
+		ComboBox<Adresse> schadensadresseComboBox = new ComboBox<Adresse>(AdresseList);
+		TextField schadensartText = new TextField();
 				
 		//MAList.setAll(col);
 		
+		anlagedatumText.setText(LocalDate.now().toString());
 		gridSchadensfall.add(mitarbeiterLabel, 0, 0);
 		gridSchadensfall.add(mitarbeiterComboBox, 1, 0);
 		gridSchadensfall.add(anlagedatumLabel, 2, 0);
@@ -353,7 +358,7 @@ public class MainView{
 		gridSchadensfall.add(schadensadresseComboBox, 3,3);
 
 		gridSchadensfall.add(schadensartLabel, 0, 4);
-		gridSchadensfall.add(schadensartComboBox, 1,4);
+		gridSchadensfall.add(schadensartText, 1,4);
 		gridSchadensfall.add(schadensdatumLabel, 2, 4);
 		gridSchadensfall.add(schadensdatumText, 3, 4);
 		
@@ -370,6 +375,10 @@ public class MainView{
 	
 	public void setGSList(ObservableList<Person> gSList) {
 		GSList = gSList;
+	}
+	
+	public void setAdresseList(ObservableList<Adresse> aDList) {
+		AdresseList = aDList;
 	}
 
 	public void setMAList(ObservableList<Mitarbeiter> mAList) {
