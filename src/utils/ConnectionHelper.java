@@ -189,8 +189,8 @@ public class ConnectionHelper {
 		ArrayList<Person> allGeschaedigteList = new ArrayList<Person>();
 		
 		while(rs.next()) {
-			allGeschaedigteList.add(new Person(rs.getString("vorname"),rs.getString("name")));
-			System.out.println(rs.getString("vorname") + " " + rs.getString("name"));
+			allGeschaedigteList.add(new Person(rs.getString("vorname"),rs.getString("name"),rs.getInt("idPerson")));
+			System.out.println(rs.getString("vorname") + " " + rs.getString("name") + " " + rs.getInt("idPerson"));
 		}
 		
 		return allGeschaedigteList;
@@ -209,5 +209,17 @@ public class ConnectionHelper {
 		return allAdressesList;
 	}
 	
+	//Philipp
+	
+	public void writeSchadensfall(Schadensfall sf, int idGeschaedigter) throws SQLException{
+		Statement wrSF = connection.createStatement();
+		String query;
+		query=  "INSERT INTO Schadensfall (Schadenart, SchadennummerExtern,idMitarbeiter,idAdresse, Anlagedatum, Schadendatum,Beschreibung) " + 
+				"values ('" + sf.getSchadenart() + "', '" + sf.getSchadenNummerExtern() + "'," + sf.getIdMitarbeiter() +
+				", "  + sf.getIdAdresse() + ", '" + sf.getAnlageDatum()  + "', '" + sf.getSchadenDatum() + "', '" +
+				sf.getBeschreibung() + "');" ;
+		wrSF.executeUpdate(query);
+		System.out.println(query);
+	}
 	
 }

@@ -2,12 +2,12 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-
-
-
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-
+import java.util.Calendar;
+import java.util.Date;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
@@ -286,6 +286,8 @@ public class Controller {
 				Adresse schAdresse = main.getSchadensadresseComboBox().getSelectionModel().getSelectedItem();
 				Person geschaedigter  = main.getGeschaedigterComboBox().getSelectionModel().getSelectedItem();
 				boolean fehlendeEingabedaten = false;
+				String schadendatum;
+				String anlagedatum;
 				
 				if(!fehlendeEingabedaten && bearbeitenderMA == null){
 					alert.setContentText("Kein Mitarbeiter angegeben!");
@@ -310,8 +312,60 @@ public class Controller {
 			        return;
 				
 		 	    }
+				
+				
+				// Überprüfen, ob Datum stimmen:
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat sqlFormat = new SimpleDateFormat("yyyyMMdd");
+				Date schadensDatum = null;
+				Date anlageDatum = null;
+				
+				alert.setTitle("Fehler");
+		        alert.setHeaderText("Falsche Eingabedaten!");
+				
+				try {
+					schadensDatum = dateFormat.parse(main.getSchadensdatumText().getText());
+				}
+				catch (ParseException pe) {
+					alert.setContentText("Kein gültiges Datum als Schadensdatum angegeben!");
+			        alert.showAndWait();
+			        return;
+				}
+				
+				try {
+					anlageDatum = dateFormat.parse(main.getAnlagedatumText().getText());
+				}
+				catch (ParseException pe) {
+					alert.setContentText("Kein gültiges Datum als Anlagedatum angegeben!");
+			        alert.showAndWait();
+			        return;
+				}
+				
+				Calendar c = Calendar.getInstance();
+				c.setTime(schadensDatum);
+				System.out.println(main.getSchadensdatumText().getText());
+				System.out.println(sqlFormat.format(c.getTime()));
+				schadendatum = sqlFormat.format(c.getTime());
+				
+				c.setTime(anlageDatum);
+				System.out.println(main.getAnlagedatumText().getText());
+				System.out.println(sqlFormat.format(c.getTime()));
+				anlagedatum = sqlFormat.format(c.getTime()); 
+				
+				Schadensfall sf = new Schadensfall(0,schAdresse.getIdAdresse(),main.getSchadensartText().getText(),
+						 main.getExtSchadensnummerText().getText(),bearbeitenderMA.getMitarbeiter_ID(),anlagedatum,schadendatum,
+						 main.getBeschreibungText().getText());
+				
+				try {
+					connection.writeSchadensfall(sf, geschaedigter.getPersonID());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 		});
+		
 		main.setMAList(FXCollections.observableArrayList(connection.getAllMitarbeiter()));
 		main.setGSList(FXCollections.observableArrayList(connection.getAllGeschaedigte()));
 		main.setAdresseList(FXCollections.observableArrayList(connection.getAllAdresses()));

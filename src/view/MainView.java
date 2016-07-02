@@ -55,6 +55,12 @@ public class MainView{
 	private ObservableList<Mitarbeiter> MAList = FXCollections.observableArrayList();
 	private ObservableList<Adresse> AdresseList = FXCollections.observableArrayList();
 	private ComboBox<Person> geschaedigterComboBox;
+	private TextField schadensdatumText;
+	private TextField anlagedatumText;
+	private TextArea beschreibungText;
+	private TextField extSchadensnummerText;
+
+	private TextField schadensartText;
 
 	private ComboBox<Mitarbeiter> mitarbeiterComboBox;
 	private ComboBox<Adresse> schadensadresseComboBox;
@@ -338,10 +344,10 @@ public class MainView{
 		Label extSchadensnummerLabel = new Label("Externe Schadensnummer:");
 		Label beschreibungLabel = new Label("Schadensbeschreibung:");
 		Label schadensadresseLabel = new Label("Schadensadresse:");
-		TextField anlagedatumText = new TextField();
-		TextField schadensdatumText = new TextField();
-		TextField extSchadensnummerText = new TextField();
-		TextArea beschreibungText = new TextArea();
+		anlagedatumText = new TextField();
+		schadensdatumText = new TextField();
+		extSchadensnummerText = new TextField();
+		beschreibungText = new TextArea();
 		SchErfOkAndSave.setText("OK und Speichern");
 		//beschreibungText.setMinSize(500, 200);
 		//beschreibungText.setWr
@@ -349,11 +355,12 @@ public class MainView{
 		geschaedigterComboBox = new ComboBox<Person>(GSList);
 		mitarbeiterComboBox = new ComboBox<Mitarbeiter>(MAList);
 		schadensadresseComboBox = new ComboBox<Adresse>(AdresseList);
-		TextField schadensartText = new TextField();
+		schadensartText = new TextField();
 				
 		//MAList.setAll(col);
 		
 		anlagedatumText.setText(LocalDate.now().toString());
+		schadensdatumText.setText(LocalDate.now().toString());
 		gridSchadensfall.add(mitarbeiterLabel, 0, 0);
 		gridSchadensfall.add(mitarbeiterComboBox, 1, 0);
 		gridSchadensfall.add(anlagedatumLabel, 2, 0);
@@ -408,6 +415,26 @@ public class MainView{
 
 	public ComboBox<Adresse> getSchadensadresseComboBox() {
 		return schadensadresseComboBox;
+	}
+	
+	public TextField getSchadensdatumText() {
+		return schadensdatumText;
+	}
+
+	public TextField getAnlagedatumText() {
+		return anlagedatumText;
+	}
+
+	public TextArea getBeschreibungText() {
+		return beschreibungText;
+	}
+
+	public TextField getSchadensartText() {
+		return schadensartText;
+	}
+	
+	public TextField getExtSchadensnummerText() {
+		return extSchadensnummerText;
 	}
 	
 }

@@ -22,4 +22,8 @@ public class Adresse {
 		return Adresse + " " + HNr + ", " + PLZ + " " + Ort ;
 	}
 	
+	public int getIdAdresse() {
+		return idAdresse;
+	}
+	
 }
