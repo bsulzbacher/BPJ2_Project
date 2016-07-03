@@ -136,13 +136,26 @@ public class Controller {
 			}
        }); 
 		
+		
+		main.getButtonRechnungsexport().setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent arg0) {
+				try {
+					exportRechnung(main);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+       }); 
 	
 	}
 	
 	
 
-	private void exportRechnung(MainView main) {
+	private void exportRechnung(MainView main) throws SQLException {
 		// TODO Christian
+		//main.setRgnList(FXCollections.observableArrayList(connection.getAllRechnungen()));
+		main.zeichneRechnungsExport();
 		
 	}
 

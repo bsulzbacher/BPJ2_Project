@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import model.KvItem;
 import model.Mitarbeiter;
 import model.Person;
+import model.Rechnungen;
 import model.Schadensfall;
 import model.Material;
 import model.Kostenvoranschlag;
@@ -50,6 +51,7 @@ public class MainView{
 	private Label mitarbeiterBezeichnung;
 	private ObservableList<Person> GSList = FXCollections.observableArrayList();
 	private ObservableList<Mitarbeiter> MAList = FXCollections.observableArrayList();
+	private ObservableList<Rechnungen> RgnList = FXCollections.observableArrayList();
 	
 	private ChoiceBox<Schadensfall> sfBox;
 	private ChoiceBox<Material> matBox;
@@ -465,6 +467,58 @@ public class MainView{
 		String text = "Sie sind angemeldet als " + name; 
 		this.mitarbeiterBezeichnung.setText(text);
 	}
+	
+	//Chris Start
+	
+	public void zeichneRechnungsExport() {
+		
+				
+				root.getChildren().clear();
+				BorderPane gridExp=new BorderPane();
+				
+				//Rechnungstabelle
+				
+				GridPane mid=new GridPane();
+				mid.setPadding(new Insets(0,20,0,20));
+				tab=new TableView();
+				
+
+		        TableColumn rngCol = new TableColumn("Rechnungsnummer");
+		        rngCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("rgnNr".toString()));
+		        TableColumn empCol = new TableColumn("Empfänger");
+		        empCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("empf"));
+		        TableColumn bezCol = new TableColumn("bezahlt ja/nein");
+		        TableColumn schCol = new TableColumn ("Schadennummer");
+		        schCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("schadNr".toString()));
+		        //ComboBox<Rechnungen> rechnungenComboBox = new ComboBox<Rechnungen>(RgnList);
+		        
+		        rngCol.setMinWidth(150);
+		        rngCol.setMaxWidth(2000);
+		        empCol.setMinWidth(100);
+		        empCol.setMaxWidth(1000);
+		        bezCol.setMinWidth(100);
+		        bezCol.setMaxWidth(1000);
+		        schCol.setMinWidth(130);
+		        schCol.setMaxWidth(1300);
+		        
+		        tab.getColumns().addAll(rngCol, empCol, bezCol, schCol);
+		        tab.setItems(kvList);
+		        final VBox vbox = new VBox();
+		        vbox.setSpacing(5);
+		        vbox.setPadding(new Insets(10, 0, 0, 10));
+		        vbox.getChildren().addAll( tab);
+		        mid.add(vbox, 0,0);
+		        		        
+		        gridExp.setCenter(mid);
+		        root.getChildren().add(gridExp);	
+				
+	}
+	
+	public void setRgnList(ObservableList<Rechnungen> rgnList) {
+		RgnList = rgnList;
+	}
+	
+	//Chris Ende
 }
 	
 	

@@ -11,6 +11,7 @@ import model.KvItem;
 import model.Material;
 import model.Mitarbeiter;
 import model.Person;
+import model.Rechnungen;
 import model.Schadensfall;
 
 public class ConnectionHelper {
@@ -111,6 +112,27 @@ public class ConnectionHelper {
 		
 		return allMaterialList;
 	}
+	
+	//Chris Start
+	
+	/*public ArrayList<Rechnungen> getAllRechnungen() throws SQLException {
+		PreparedStatement stmt = connection.prepareStatement("SELECT idRgn, bezahlt, sd.name, idSchadensfall FROM Rechnung rg join Stammdaten sd on rg.idEmpfaenger = sd.idPerson");
+		ResultSet rs= stmt.executeQuery();
+		
+		ArrayList<Rechnungen> allRechnungList = new ArrayList<Rechnungen>();
+		
+		while(rs.next()) {
+			int idRgn=rs.getInt("idRng");
+			String bezahlt=rs.getString("bezahlt");
+			String name=rs.getString("name");
+			int idSchadensfall=rs.getInt("idSchadensfall");
+			allRechnungList.add(new Rechnungen(idRgn, bezahlt, name, idSchadensfall));
+		}
+		
+		return allRechnungList;
+	}*/
+	
+	//Chris Ende
 	
 	//HARY START
 	public ArrayList<Kostenvoranschlag> getAllKostenvoranschlaege()throws SQLException {
