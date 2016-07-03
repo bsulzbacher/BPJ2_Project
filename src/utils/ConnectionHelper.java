@@ -122,7 +122,7 @@ public class ConnectionHelper {
 		ArrayList<Rechnungen> allRechnungList = new ArrayList<Rechnungen>();
 		
 		while(rs.next()) {
-			int idRgn=rs.getInt("idRng");
+			int idRgn=rs.getInt("idRgn");
 			String bezahlt=rs.getString("bezahlt");
 			String name=rs.getString("name");
 			int idSchadensfall=rs.getInt("idSchadensfall");

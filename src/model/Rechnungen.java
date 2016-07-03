@@ -2,7 +2,7 @@ package model;
 
 public class Rechnungen {
 
-	private int rngNr;
+	private int rgnNr;
 	private String empf;
 	private String bez;
 	private int schadNr;	 
@@ -10,7 +10,7 @@ public class Rechnungen {
 	
 	public Rechnungen(int rngNr, String empf, String bez, int schadNr) {
 		super();
-		this.rngNr = rngNr;
+		this.rgnNr = rngNr;
 		this.empf = empf;
 		this.bez = bez;
 		this.schadNr = schadNr;
@@ -20,14 +20,14 @@ public class Rechnungen {
 	
 
 	public int getRngNr() {
-		return rngNr;
+		return rgnNr;
 	}
 
 
 
 
 	public void setRngNr(int rngNr) {
-		this.rngNr = rngNr;
+		this.rgnNr = rngNr;
 	}
 
 
@@ -77,7 +77,7 @@ public class Rechnungen {
 
 	@Override
 	public String toString() {
-		return rngNr+"-"+empf ;
+		return rgnNr+"-"+empf ;
 	}
 
 }
