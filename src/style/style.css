@@ -20,6 +20,19 @@
 	-fx-background-color:  #fff;
 }
 
+#rechnung {
+	-fx-background-color:  #fff;
+}
+
+#ueberschrift {
+	-fx-font-size: 15pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-opacity: 1;
+}
+
+#datum {
+	-fx-opacity: 1;
+}
 #error {
 	-fx-text-fill: red;
 }

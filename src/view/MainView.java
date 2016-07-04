@@ -12,7 +12,10 @@ import model.Material;
 import model.Kostenvoranschlag;
 
 import java.awt.Dimension;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,6 +34,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -47,15 +51,18 @@ public class MainView{
 	private Button button4;
 	private Button button5;
 	private TextField textField;
+	private Label kundenDaten;
 	private Button speicherKostenvoranschlag;
 	private Label mitarbeiterBezeichnung;
 	private ObservableList<Person> GSList = FXCollections.observableArrayList();
 	private ObservableList<Mitarbeiter> MAList = FXCollections.observableArrayList();
 	private ObservableList<Rechnungen> RgnList = FXCollections.observableArrayList();
-	
+	private BorderPane rechnung;
 	private ChoiceBox<Schadensfall> sfBox;
+	private ChoiceBox<Schadensfall> sfBox2;
 	private ChoiceBox<Material> matBox;
 	private ObservableList<Schadensfall> sfList = FXCollections.observableArrayList();
+	private ObservableList<Schadensfall> sfList2 = FXCollections.observableArrayList();
 	private ObservableList<Material> matList = FXCollections.observableArrayList();
 	private ObservableList<KvItem> kvList = FXCollections.observableArrayList();
 	
@@ -245,13 +252,25 @@ public class MainView{
 		sfList = SFList;
 	}
 
+	public void setSfList2(ObservableList<Schadensfall> SFList) {
+		sfList2 = SFList;
+	}
+
 	
 	public ObservableList<Schadensfall> getSfList() {
 		return sfList;
 	}
+	
+	public ObservableList<Schadensfall> getSfList2() {
+		return sfList2;
+	}
 
 	public ChoiceBox<Schadensfall> getSfBox() {
 		return sfBox;
+	}
+	
+	public ChoiceBox<Schadensfall> getSfBox2() {
+		return sfBox2;
 	}
 
 	public void setMatList(ObservableList<Material> MATList) {
@@ -519,6 +538,138 @@ public class MainView{
 	}
 	
 	//Chris Ende
+	
+    public void zeichneAuftragsabschluss() {
+        root.getChildren().clear();
+        BorderPane border=new BorderPane();
+              
+        GridPane grid = new GridPane();
+        grid.setHgap(20);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(0,20,0,20));
+        
+        
+        Label t1 =new Label("Waehle Schadensfall:");
+        t1.setPrefWidth(200);
+        grid.add(t1,0,0);
+        sfBox2 = new ChoiceBox<Schadensfall>(sfList2);
+        sfBox2.setMinWidth(200);
+        grid.add(sfBox2, 1,0);
+        
+        Label t2 =new Label("Waehle Kostenvoranschlag:");
+        grid.add(t2, 0,1);
+        
+        kvBox = new ChoiceBox<Kostenvoranschlag>(kostenvoranschlagList);
+        kvBox.setMinWidth(200);
+        grid.add(this.kvBox, 1, 1);
+        
+        
+        Label t3=new Label("");
+        grid.add(t3, 0, 2);
+     
+        matHinzu=new Button("Erstelle Rechnung");
+        grid.add(matHinzu, 2, 2);
+        
+        border.setTop(grid);
+        rechnung = new BorderPane();
+        rechnung.setPadding(new Insets(10));
+        rechnung.setId("rechnung");
+        //Mittelteil
+        
+        GridPane mid=new GridPane();
+        mid.setPadding(new Insets(0,20,0,20));
+        tab=new TableView();
+        
+
+   TableColumn posCol = new TableColumn("Pos");
+   posCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("pos".toString()));
+   TableColumn matCol = new TableColumn("Material");
+   matCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("matName"));
+   TableColumn epCol = new TableColumn("Einzelpreis");
+   epCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("vkPreis".toString()));
+   TableColumn anzCol = new TableColumn("Anzahl");
+   anzCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("anzahl".toString()));
+   TableColumn sumCol = new TableColumn ("Preis Summe");
+   sumCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("summe".toString()));
+   
+   posCol.setMaxWidth(50);
+   matCol.setMinWidth(300);
+   matCol.setMaxWidth(1000);
+   
+   tab.getColumns().addAll(posCol, matCol, epCol, anzCol, sumCol);
+   tab.setItems(kvList);
+   final VBox vbox = new VBox();
+   vbox.setSpacing(5);
+   vbox.setPadding(new Insets(10));
+   vbox.getChildren().addAll( tab);
+    
+        this.kundenDaten = new Label();
+        Label firmendaten = new Label();
+        firmendaten.setText("Teststraﬂe1, Graz");
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        Date date = new Date();
+        System.out.println(dateFormat.format(date));
+        Label rechnungsdatum = new Label();
+        rechnungsdatum.setId("datum");
+        rechnungsdatum.setText("Rechnungsdatum: " + dateFormat.format(date));
+        HBox b=new HBox();
+        b.setPadding(new Insets(10,10,10,10));
+        b.setAlignment(Pos.CENTER_RIGHT);
+        b.getChildren().addAll(firmendaten);  
+        HBox rdat=new HBox();
+        rdat.setPadding(new Insets(10,10,10,10));
+        rdat.setAlignment(Pos.CENTER_RIGHT);
+        rdat.getChildren().addAll(rechnungsdatum);  
+        Label ueberschrift = new Label();
+        ueberschrift.setText("Rechnung");
+        ueberschrift.setId("ueberschrift");
+        GridPane g = new GridPane();
+        g.setPadding(new Insets(10));
+        ColumnConstraints column1 = new ColumnConstraints();
+        column1.setPercentWidth(50);
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setPercentWidth(50);
+        g.getColumnConstraints().addAll(column1, column2);
+        final ImageView selectedImage = new ImageView();   
+        Image image1 = new Image(MainView.class.getResourceAsStream("../images/logo.jpg"));
+        selectedImage.setImage(image1);
+        selectedImage.setFitWidth(100);
+        selectedImage.setFitHeight(25);
+        HBox img=new HBox();
+        img.setPadding(new Insets(10,10,0,10));
+        img.setAlignment(Pos.CENTER_RIGHT);
+        img.getChildren().addAll(selectedImage);  
+        g.add(img, 1, 0);
+        g.add(ueberschrift, 0, 4);
+        g.add(b, 1, 1);
+        g.add(rdat, 1, 2);
+        g.add(kundenDaten, 0,3);
+        rechnung.setTop(g);
+        rechnung.setCenter(vbox);
+        ///unten
+        
+        HBox box=new HBox();
+        box.setPadding(new Insets(10,10,10,10));
+        box.setAlignment(Pos.CENTER_RIGHT);
+        
+        Label t4=new Label("Gesamtsumme: ");
+        KVsum=new Label(Double.toString(gesamtSumKv));
+        Label t5=new Label(" EUR ");
+        
+        box.getChildren().addAll(t4,KVsum,t5);             
+        rechnung.setBottom(box);
+        border.setCenter(mid);
+        mid.add(rechnung, 0,0);
+        rechnung.setVisible(false);
+        root.getChildren().add(border);
+ }     
+    public void showRechnung () {
+    	this.rechnung.setVisible(true);
+    }
+    public void setKundenDaten(String daten) {
+    	this.kundenDaten.setText(daten);
+    }
+
 }
 	
 	

@@ -132,7 +132,12 @@ public class Controller {
        }); 
 		main.getButtonRechnungserstellung().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
-				erstelleRechnung(main);
+				try {
+					erstelleRechnung(main, -1);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
        }); 
 		
@@ -159,9 +164,57 @@ public class Controller {
 		
 	}
 
-	protected void erstelleRechnung(MainView main) {
-		// TODO Isabella
-		
+	private void erstelleRechnung(MainView main, int id) throws SQLException {
+       main.getKvList().clear();
+       // main.getSfList().clear();
+        
+       // main.setKostenvoranschlagList(FXCollections.observableArrayList());
+        ArrayList<Schadensfall> schadensfaelle = connection.getAllSchaeden();
+        main.setSfList2(FXCollections.observableArrayList(schadensfaelle));
+        main.zeichneAuftragsabschluss();
+        if(id != -1) {
+        	main.getSfBox2().getSelectionModel().select(id);
+        }
+		main.getSfBox2().getSelectionModel().selectedItemProperty().addListener(
+				new ChangeListener<Schadensfall>(){
+					@Override
+					public void changed(ObservableValue<? extends Schadensfall> observable, Schadensfall oldValue,
+							Schadensfall newValue) {
+						// TODO Auto-generated method stub
+						try {
+							ArrayList<Kostenvoranschlag> kv  = connection.getKostenvoranschlaege(newValue.getIdSchadensfall());
+							main.setKostenvoranschlagList(FXCollections.observableArrayList(kv));
+							erstelleRechnung(main, newValue.getIdSchadensfall());
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+		main.getButtonMatHinzu().setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent arg0) {
+				Schadensfall sf = main.getSfBox2().getSelectionModel().getSelectedItem();
+				String kundendaten = sf.getGeschaedigter();
+				kundendaten = kundendaten + "\n" + sf.getAdresse();
+				System.out.println(kundendaten);
+				main.setKundenDaten(kundendaten);
+				Kostenvoranschlag kv = main.getKvBox().getSelectionModel().getSelectedItem();
+				try {
+					main.setGesamtSumKv(connection.getKVsum(kv.getIdKV()));
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				main.refreshKVsum();
+				try {
+					main.getKvList().setAll(connection.getAllKvItems(kv.getIdKV()));
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				main.showRechnung();
+			}
+		});         
 	}
 	
 	//HARY START
@@ -210,8 +263,6 @@ public class Controller {
 				        alert.setHeaderText("Fehler");
 				        alert.showAndWait();
 					}
-						
-					
 				}	
 			});
 			

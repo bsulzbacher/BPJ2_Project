@@ -245,5 +245,38 @@ public class ConnectionHelper {
 		return allGeschaedigteList;
 	}
 	
+	public ArrayList<Material> getMaterialRechnung(int idSchadensfall) {
+		ArrayList<Material> material = new ArrayList<Material>();
+		//PreparedStatement stmt = connection.prepareStatement("SELECT idMaterial, materialName, VKPreis from Material where idMaterial in (select idMaterial from Verbrauch where idKV in (SELECT idKV from Kostenvoranschlag where idSchadensfall = 1 and freigegeben = 'ja'))");
+		return material;
+	}
+	
+	public ArrayList<Kostenvoranschlag> getKostenvoranschlaege(int idSchadensfall) throws SQLException {
+		ArrayList<Kostenvoranschlag> kostenvoranschlaege = new ArrayList<Kostenvoranschlag>();
+		PreparedStatement stmt = connection.prepareStatement
+				("Select kv.idKV as KVID,a.strasse,a.ort ,s.Name, sf.Beschreibung, sf.Schadendatum as Schadensdatum, sum(distinct m.VKPreis*v.verranschlagt) as Summe"
+						+" from Schadensfall sf "
+						+" join Geschaedigte g on sf.idSchadensfall = g.SchadensfallID "
+						+" join Kostenvoranschlag kv on kv.idSchadensfall = sf.idSchadensfall" 
+						+" join Stammdaten s on g.PersonenID = s.idPerson "
+						+" join Verbrauch v on kv.idKV = v.idKV"
+						+" join Material m on m.idMaterial = v.idMaterial "
+						+" join Adresse a on sf.idAdresse=a.idAdresse"
+						+" where kv.Freigegeben='ja' and sf.idSchadensfall = ?"
+						+" group by  kv.idKV, sf.Beschreibung, sf.Schadendatum ;");
+		stmt.setInt(1, idSchadensfall);
+		ResultSet rs= stmt.executeQuery();
+		
+		while(rs.next()) {
+			int idKV=rs.getInt("KVID");
+			String beschreibung=rs.getString("name")+" - "+rs.getString("strasse")+" - "+rs.getString("ort");
+			Date schadendatum=rs.getDate("Schadensdatum");
+			double summe=rs.getDouble("Summe");
+			Kostenvoranschlag kv = new Kostenvoranschlag(idKV, beschreibung, schadendatum, summe);
+			kostenvoranschlaege.add(kv);
+		}
+		return kostenvoranschlaege;
+	}
+	
 	
 }
