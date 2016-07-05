@@ -11,7 +11,7 @@ import model.KvItem;
 import model.Material;
 import model.Mitarbeiter;
 import model.Person;
-import model.Rechnungen;
+import model.Rechnung;
 import model.Schadensfall;
 
 public class ConnectionHelper {
@@ -81,14 +81,14 @@ public class ConnectionHelper {
 	}
 	
 	public ArrayList<Schadensfall> getAllSchaeden() throws SQLException {
-		PreparedStatement stmt = connection.prepareStatement("SELECT a.idSchadensfall,c.Vorname,c.Name, d.Strasse, d.Hnr, d.Ort FROM Schadensfall a inner join  Geschaedigte b on a.idSchadensfall=b.SchadensfallID inner join Stammdaten c on b.PersonenId=c.idPerson inner join Adresse d on a.idAdresse=d.idAdresse");
+		PreparedStatement stmt = connection.prepareStatement("SELECT a.idSchadensfall,c.Vorname,c.Name, d.Strasse, d.Hnr, d.Ort, c.idPerson FROM Schadensfall a inner join  Geschaedigte b on a.idSchadensfall=b.SchadensfallID inner join Stammdaten c on b.PersonenId=c.idPerson inner join Adresse d on a.idAdresse=d.idAdresse");
 		ResultSet rs= stmt.executeQuery();
 		
 		ArrayList<Schadensfall> allSchaedenList = new ArrayList<Schadensfall>();
 		
 		while(rs.next()) {
 			int idSchaden=rs.getInt("idSchadensfall");
-			String name=rs.getString("Name")+" "+rs.getString("Vorname");
+			String name=rs.getInt("idPerson") + ":" + rs.getString("Name")+" "+rs.getString("Vorname");
 			String adresse=rs.getString("Strasse")+" "+rs.getString("Hnr")+" "+rs.getString("Ort");
 			
 			allSchaedenList.add(new Schadensfall(idSchaden,name,adresse));
@@ -278,5 +278,13 @@ public class ConnectionHelper {
 		return kostenvoranschlaege;
 	}
 	
-	
+	public void createRechnung(Rechnung rechnung) throws SQLException {
+		Date CreatedDate= new Date(System.currentTimeMillis());
+		java.util.Date d = new java.util.Date();
+		long t = d.getTime();
+		Timestamp time = new Timestamp(t);
+		PreparedStatement statement = connection.prepareStatement("insert into Rechnung(idSchadensfall,verschickt,bezahlt, idEmpfaenger, export, bearbeitDat) values ("+rechnung.getSchadNr()+",'nein','nein',"+rechnung.getEmpf()+",'nein',?" + ")"); 
+		statement.setTimestamp(1, time);
+		statement.executeUpdate();
+	}
 }

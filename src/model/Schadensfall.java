@@ -4,13 +4,15 @@ public class Schadensfall {
 	private int idSchadensfall;
 	private String geschaedigter;
 	private String adresse;
-	
+	private int geschaedigterID;
 	
 	
 	public Schadensfall(int idSchadensfall, String geschaedigter, String adresse) {
 		super();
 		this.idSchadensfall = idSchadensfall;
-		this.geschaedigter = geschaedigter;
+		String[] data = geschaedigter.split(":");
+		this.geschaedigter = data[1];
+		this.geschaedigterID = Integer.parseInt(data[0]);
 		this.adresse = adresse;
 	}
 	public int getIdSchadensfall() {
@@ -20,6 +22,10 @@ public class Schadensfall {
 		return geschaedigter;
 	}
 
+	public int getIDGeschaedigter() {
+		return this.geschaedigterID;
+	}
+	
 	public String getAdresse() {
 		return adresse;
 	}

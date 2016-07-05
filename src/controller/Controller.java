@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import model.Kostenvoranschlag;
 import model.KvItem;
 import model.Mitarbeiter;
+import model.Rechnung;
 import model.Schadensfall;
 import model.Material;
 import utils.ConnectionHelper;
@@ -133,7 +134,7 @@ public class Controller {
 		main.getButtonRechnungserstellung().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
 				try {
-					erstelleRechnung(main, -1);
+					erstelleRechnung(main);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -164,17 +165,14 @@ public class Controller {
 		
 	}
 
-	private void erstelleRechnung(MainView main, int id) throws SQLException {
+	private void erstelleRechnung(MainView main) throws SQLException {
        main.getKvList().clear();
        // main.getSfList().clear();
-        
        // main.setKostenvoranschlagList(FXCollections.observableArrayList());
         ArrayList<Schadensfall> schadensfaelle = connection.getAllSchaeden();
-        main.setSfList2(FXCollections.observableArrayList(schadensfaelle));
         main.zeichneAuftragsabschluss();
-        if(id != -1) {
-        	main.getSfBox2().getSelectionModel().select(id);
-        }
+        main.setSfList2(FXCollections.observableArrayList(schadensfaelle));
+        main.getSfBox2().setItems(main.getSfList2());
 		main.getSfBox2().getSelectionModel().selectedItemProperty().addListener(
 				new ChangeListener<Schadensfall>(){
 					@Override
@@ -184,7 +182,7 @@ public class Controller {
 						try {
 							ArrayList<Kostenvoranschlag> kv  = connection.getKostenvoranschlaege(newValue.getIdSchadensfall());
 							main.setKostenvoranschlagList(FXCollections.observableArrayList(kv));
-							erstelleRechnung(main, newValue.getIdSchadensfall());
+							main.getKvBox().setItems(main.getKostenvoranschlagList());
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -212,7 +210,14 @@ public class Controller {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				Rechnung rechnung = new Rechnung(-1, sf.getIDGeschaedigter(), sf.getIdSchadensfall());
 				main.showRechnung();
+				try {
+					connection.createRechnung(rechnung);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});         
 	}

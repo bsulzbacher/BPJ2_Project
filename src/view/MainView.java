@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 import model.KvItem;
 import model.Mitarbeiter;
 import model.Person;
-import model.Rechnungen;
+import model.Rechnung;
 import model.Schadensfall;
 import model.Material;
 import model.Kostenvoranschlag;
@@ -56,7 +56,7 @@ public class MainView{
 	private Label mitarbeiterBezeichnung;
 	private ObservableList<Person> GSList = FXCollections.observableArrayList();
 	private ObservableList<Mitarbeiter> MAList = FXCollections.observableArrayList();
-	private ObservableList<Rechnungen> RgnList = FXCollections.observableArrayList();
+	private ObservableList<Rechnung> RgnList = FXCollections.observableArrayList();
 	private BorderPane rechnung;
 	private ChoiceBox<Schadensfall> sfBox;
 	private ChoiceBox<Schadensfall> sfBox2;
@@ -533,7 +533,7 @@ public class MainView{
 				
 	}
 	
-	public void setRgnList(ObservableList<Rechnungen> rgnList) {
+	public void setRgnList(ObservableList<Rechnung> rgnList) {
 		RgnList = rgnList;
 	}
 	
