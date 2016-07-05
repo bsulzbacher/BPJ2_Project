@@ -358,6 +358,11 @@ public class Controller {
 				
 				try {
 					connection.writeSchadensfall(sf, geschaedigter.getPersonID());
+					alert.setTitle("Erfolg");
+			        alert.setHeaderText("Speichern erfolgt.");
+					alert.setContentText("Daten wurden in die Datenbank geschrieben!");
+			        alert.showAndWait();
+					main.zeichneSchadenfallerfassung();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
