@@ -219,7 +219,7 @@ public class ConnectionHelper {
 				", "  + sf.getIdAdresse() + ", '" + sf.getAnlageDatum()  + "', '" + sf.getSchadenDatum() + "', '" +
 				sf.getBeschreibung() + "');" ;
 		wrSF.executeUpdate(query);
-		System.out.println(query);
+		//System.out.println(query);
 		
 		PreparedStatement read=connection.prepareStatement("SELECT distinct last_insert_id() FROM Sanierung.Schadensfall;");
 		ResultSet rs=read.executeQuery();
@@ -229,7 +229,8 @@ public class ConnectionHelper {
 		}	
 		
 		query= "INSERT INTO Geschaedigte (SchadensfallID, PersonenID) values ( " + schadensfall_ID +  ", " + idGeschaedigter + " );";
-		System.out.println(query);
+		wrSF.executeUpdate(query);
+		//System.out.println(query);
 		
 	}
 	
