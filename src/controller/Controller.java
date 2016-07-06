@@ -160,8 +160,35 @@ public class Controller {
 
 	private void exportRechnung(MainView main) throws SQLException {
 		// TODO Christian
-		//main.setRgnList(FXCollections.observableArrayList(connection.getAllRechnungen()));
+		main.setRgnList(FXCollections.observableArrayList(connection.getAllRechnungen()));
 		main.zeichneRechnungsExport();
+		
+		main.getExport().setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				try {
+					connection.updateExport();
+					
+					exportRechnung(main);
+					
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				final Alert alert = new Alert(AlertType.INFORMATION);
+
+				alert.setContentText("Export ist erfogt!");
+		        alert.setTitle("Export durchgeführt");
+		        alert.setHeaderText("");
+		        alert.showAndWait();
+				
+			}
+		});
 		
 	}
 

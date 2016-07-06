@@ -7,6 +7,7 @@ import model.KvItem;
 import model.Mitarbeiter;
 import model.Person;
 import model.Rechnung;
+import model.Rechnungsexport;
 import model.Schadensfall;
 import model.Material;
 import model.Kostenvoranschlag;
@@ -56,7 +57,7 @@ public class MainView{
 	private Label mitarbeiterBezeichnung;
 	private ObservableList<Person> GSList = FXCollections.observableArrayList();
 	private ObservableList<Mitarbeiter> MAList = FXCollections.observableArrayList();
-	private ObservableList<Rechnung> RgnList = FXCollections.observableArrayList();
+	private ObservableList<Rechnungsexport> RgnList = FXCollections.observableArrayList();
 	private BorderPane rechnung;
 	private ChoiceBox<Schadensfall> sfBox;
 	private ChoiceBox<Schadensfall> sfBox2;
@@ -65,6 +66,8 @@ public class MainView{
 	private ObservableList<Schadensfall> sfList2 = FXCollections.observableArrayList();
 	private ObservableList<Material> matList = FXCollections.observableArrayList();
 	private ObservableList<KvItem> kvList = FXCollections.observableArrayList();
+	private Button export;
+	
 	
 	//HARY START
 	private ObservableList<Kostenvoranschlag> kostenvoranschlagList = FXCollections.observableArrayList();
@@ -503,12 +506,13 @@ public class MainView{
 				
 
 		        TableColumn rngCol = new TableColumn("Rechnungsnummer");
-		        rngCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("rgnNr".toString()));
+		        rngCol.setCellValueFactory(new PropertyValueFactory<Rechnungsexport,String>("rgnNr".toString()));
 		        TableColumn empCol = new TableColumn("Empfänger");
-		        empCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("empf"));
+		        empCol.setCellValueFactory(new PropertyValueFactory<Rechnungsexport,String>("name"));
 		        TableColumn bezCol = new TableColumn("bezahlt ja/nein");
+		        bezCol.setCellValueFactory(new PropertyValueFactory<Rechnungsexport, String>("bezahlt"));
 		        TableColumn schCol = new TableColumn ("Schadennummer");
-		        schCol.setCellValueFactory(new PropertyValueFactory<KvItem,String>("schadNr".toString()));
+		        schCol.setCellValueFactory(new PropertyValueFactory<Rechnungsexport,String>("schadNr".toString()));
 		        //ComboBox<Rechnungen> rechnungenComboBox = new ComboBox<Rechnungen>(RgnList);
 		        
 		        rngCol.setMinWidth(150);
@@ -521,7 +525,7 @@ public class MainView{
 		        schCol.setMaxWidth(1300);
 		        
 		        tab.getColumns().addAll(rngCol, empCol, bezCol, schCol);
-		        tab.setItems(kvList);
+		        tab.setItems(RgnList);
 		        final VBox vbox = new VBox();
 		        vbox.setSpacing(5);
 		        vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -530,10 +534,27 @@ public class MainView{
 		        		        
 		        gridExp.setCenter(mid);
 		        root.getChildren().add(gridExp);	
+		        
+		        VBox bottom = new VBox();
+		        bottom.setPadding(new Insets(10, 0, 0, 10));
+		        
+		        export = new Button("Rechnungen exportieren");
+		        
+		        bottom.getChildren().addAll(export);
+		        
+		        gridExp.setBottom(bottom);
+		        
+		        
 				
 	}
 	
-	public void setRgnList(ObservableList<Rechnung> rgnList) {
+	
+	
+	public Button getExport() {
+		return export;
+	}
+
+	public void setRgnList(ObservableList<Rechnungsexport> rgnList) {
 		RgnList = rgnList;
 	}
 	

@@ -12,6 +12,7 @@ import model.Material;
 import model.Mitarbeiter;
 import model.Person;
 import model.Rechnung;
+import model.Rechnungsexport;
 import model.Schadensfall;
 
 public class ConnectionHelper {
@@ -115,22 +116,30 @@ public class ConnectionHelper {
 	
 	//Chris Start
 	
-	/*public ArrayList<Rechnungen> getAllRechnungen() throws SQLException {
-		PreparedStatement stmt = connection.prepareStatement("SELECT idRgn, bezahlt, sd.name, idSchadensfall FROM Rechnung rg join Stammdaten sd on rg.idEmpfaenger = sd.idPerson");
+	public ArrayList<Rechnungsexport> getAllRechnungen() throws SQLException {
+		PreparedStatement stmt = connection.prepareStatement("SELECT idRgn, bezahlt, sd.name, idSchadensfall FROM Rechnung rg join Stammdaten sd on rg.idEmpfaenger = sd.idPerson where rg.export = 'nein'");
 		ResultSet rs= stmt.executeQuery();
 		
-		ArrayList<Rechnungen> allRechnungList = new ArrayList<Rechnungen>();
+		ArrayList<Rechnungsexport> allRechnungList = new ArrayList<Rechnungsexport>();
 		
 		while(rs.next()) {
 			int idRgn=rs.getInt("idRgn");
 			String bezahlt=rs.getString("bezahlt");
 			String name=rs.getString("name");
 			int idSchadensfall=rs.getInt("idSchadensfall");
-			allRechnungList.add(new Rechnungen(idRgn, bezahlt, name, idSchadensfall));
+			allRechnungList.add(new Rechnungsexport(idRgn, bezahlt, name, idSchadensfall));
 		}
 		
 		return allRechnungList;
-	}*/
+	}
+	
+	
+	public void updateExport() throws SQLException{
+		Statement upEx = connection.createStatement();
+		String query;
+		query="update Rechnung set export = 'ja' where export = 'nein'"; 
+		upEx.executeUpdate(query);
+		}
 	
 	//Chris Ende
 	
