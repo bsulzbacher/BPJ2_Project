@@ -10,11 +10,14 @@ import model.Rechnung;
 import model.Rechnungsexport;
 import model.Schadensfall;
 import model.Material;
+import model.Adresse;
 import model.Kostenvoranschlag;
 
 import java.awt.Dimension;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -59,6 +62,18 @@ public class MainView{
 	private ObservableList<Mitarbeiter> MAList = FXCollections.observableArrayList();
 	private ObservableList<Rechnungsexport> RgnList = FXCollections.observableArrayList();
 	private BorderPane rechnung;
+	private ObservableList<Adresse> AdresseList = FXCollections.observableArrayList();
+	private ComboBox<Person> geschaedigterComboBox;
+	private TextField schadensdatumText;
+	private TextField anlagedatumText;
+	private TextArea beschreibungText;
+	private TextField extSchadensnummerText;
+
+	private TextField schadensartText;
+
+	private ComboBox<Mitarbeiter> mitarbeiterComboBox;
+	private ComboBox<Adresse> schadensadresseComboBox;
+	
 	private ChoiceBox<Schadensfall> sfBox;
 	private ChoiceBox<Schadensfall> sfBox2;
 	private ChoiceBox<Material> matBox;
@@ -66,9 +81,15 @@ public class MainView{
 	private ObservableList<Schadensfall> sfList2 = FXCollections.observableArrayList();
 	private ObservableList<Material> matList = FXCollections.observableArrayList();
 	private ObservableList<KvItem> kvList = FXCollections.observableArrayList();
+
 	private Button export;
 	
+	private Button SchErfOkAndSave = new Button();
 	
+	public Button getSchErfOkAndSave() {
+		return SchErfOkAndSave;
+	}
+
 	//HARY START
 	private ObservableList<Kostenvoranschlag> kostenvoranschlagList = FXCollections.observableArrayList();
 	private ChoiceBox<Kostenvoranschlag> kvBox;
@@ -148,7 +169,7 @@ public class MainView{
 		pane.setTop(flow);
 
 		// Anzeige des Hauptfenster
-        Scene scene = new Scene(pane, 1024, 600);
+        Scene scene = new Scene(pane, 1200, 600);
         scene.getStylesheets().add
         (MainView.class.getResource("../style/style.css").toExternalForm());
         primaryStage.setScene(scene);
@@ -426,30 +447,31 @@ public class MainView{
 		gridSchadensfall.setHgap(10);
 		gridSchadensfall.setVgap(10);
 		gridSchadensfall.setPadding(new Insets(10,10,10,10));
-		Label geschaedigterLabel = new Label("Geschaedigten ausw�hlen:");
-		Label mitarbeiterLabel = new Label("Mitarbeiter ausw�hlen:");
+		Label geschaedigterLabel = new Label("Geschaedigten auswaehlen:");
+		Label mitarbeiterLabel = new Label("Mitarbeiter auswaehlen:");
 		Label schadensartLabel = new Label("Schadensart:");
 		Label anlagedatumLabel = new Label("Anlagedatum:");
 		Label schadensdatumLabel = new Label("Schadensdatum:");
 		Label extSchadensnummerLabel = new Label("Externe Schadensnummer:");
 		Label beschreibungLabel = new Label("Schadensbeschreibung:");
 		Label schadensadresseLabel = new Label("Schadensadresse:");
-		TextField anlagedatumText = new TextField();
-		TextField schadensdatumText = new TextField();
-		TextField extSchadensnummerText = new TextField();
-		TextArea beschreibungText = new TextArea();
-		Button okAndSaveButton = new Button();
-		okAndSaveButton.setText("OK und Speichern");
+		anlagedatumText = new TextField();
+		schadensdatumText = new TextField();
+		extSchadensnummerText = new TextField();
+		beschreibungText = new TextArea();
+		SchErfOkAndSave.setText("OK und Speichern");
 		//beschreibungText.setMinSize(500, 200);
 		//beschreibungText.setWr
 		
-		ComboBox<Person> geschaedigterComboBox = new ComboBox<Person>(GSList);
-		ComboBox<Mitarbeiter> mitarbeiterComboBox = new ComboBox<Mitarbeiter>(MAList);
-		ComboBox schadensartComboBox = new ComboBox();
-		ComboBox schadensadresseComboBox = new ComboBox();
+		geschaedigterComboBox = new ComboBox<Person>(GSList);
+		mitarbeiterComboBox = new ComboBox<Mitarbeiter>(MAList);
+		schadensadresseComboBox = new ComboBox<Adresse>(AdresseList);
+		schadensartText = new TextField();
 				
 		//MAList.setAll(col);
 		
+		anlagedatumText.setText(LocalDate.now().toString());
+		schadensdatumText.setText(LocalDate.now().toString());
 		gridSchadensfall.add(mitarbeiterLabel, 0, 0);
 		gridSchadensfall.add(mitarbeiterComboBox, 1, 0);
 		gridSchadensfall.add(anlagedatumLabel, 2, 0);
@@ -462,7 +484,7 @@ public class MainView{
 		gridSchadensfall.add(schadensadresseComboBox, 3,3);
 
 		gridSchadensfall.add(schadensartLabel, 0, 4);
-		gridSchadensfall.add(schadensartComboBox, 1,4);
+		gridSchadensfall.add(schadensartText, 1,4);
 		gridSchadensfall.add(schadensdatumLabel, 2, 4);
 		gridSchadensfall.add(schadensdatumText, 3, 4);
 		
@@ -472,13 +494,17 @@ public class MainView{
 		gridSchadensfall.add(beschreibungLabel, 0,7);
 		gridSchadensfall.add(beschreibungText,1,7,5,1);
 		
-		gridSchadensfall.add(okAndSaveButton, 3, 8,4,1);
+		gridSchadensfall.add(SchErfOkAndSave, 3, 8,4,1);
 		
 		root.getChildren().add(gridSchadensfall);
 	}
 	
 	public void setGSList(ObservableList<Person> gSList) {
 		GSList = gSList;
+	}
+	
+	public void setAdresseList(ObservableList<Adresse> aDList) {
+		AdresseList = aDList;
 	}
 
 	public void setMAList(ObservableList<Mitarbeiter> mAList) {
@@ -691,6 +717,38 @@ public class MainView{
     	this.kundenDaten.setText(daten);
     }
 
+	public ComboBox<Person> getGeschaedigterComboBox() {
+		return geschaedigterComboBox;
+	}
+
+	public ComboBox<Mitarbeiter> getMitarbeiterComboBox() {
+		return mitarbeiterComboBox;
+	}
+
+	public ComboBox<Adresse> getSchadensadresseComboBox() {
+		return schadensadresseComboBox;
+	}
+	
+	public TextField getSchadensdatumText() {
+		return schadensdatumText;
+	}
+
+	public TextField getAnlagedatumText() {
+		return anlagedatumText;
+	}
+
+	public TextArea getBeschreibungText() {
+		return beschreibungText;
+	}
+
+	public TextField getSchadensartText() {
+		return schadensartText;
+	}
+	
+	public TextField getExtSchadensnummerText() {
+		return extSchadensnummerText;
+	}
+	
 }
 	
 	

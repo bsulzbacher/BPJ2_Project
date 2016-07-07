@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javafx.collections.ObservableList;
 import javafx.util.Callback;
+import model.Adresse;
 import model.Kostenvoranschlag;
 import model.KvItem;
 import model.Material;
@@ -242,22 +243,63 @@ public class ConnectionHelper {
 	}
 
 	public ArrayList<Person> getAllGeschaedigte() throws SQLException {
-		PreparedStatement stmt = connection.prepareStatement("SELECT idPerson, vorname, name, email FROM Stammdaten WHERE Typ = 'Geschaedigte' ");
+		PreparedStatement stmt = connection.prepareStatement("SELECT idPerson, vorname, name FROM Stammdaten WHERE Typ = 'Geschaedigter' ");
 		ResultSet rs= stmt.executeQuery();
 		
 		ArrayList<Person> allGeschaedigteList = new ArrayList<Person>();
 		
 		while(rs.next()) {
-			allGeschaedigteList.add(new Person(rs.getString("vorname"),rs.getString("name")));
+			allGeschaedigteList.add(new Person(rs.getString("vorname"),rs.getString("name"),rs.getInt("idPerson")));
+			System.out.println(rs.getString("vorname") + " " + rs.getString("name") + " " + rs.getInt("idPerson"));
 		}
 		
 		return allGeschaedigteList;
 	}
 	
+
 	public ArrayList<Material> getMaterialRechnung(int idSchadensfall) {
 		ArrayList<Material> material = new ArrayList<Material>();
 		//PreparedStatement stmt = connection.prepareStatement("SELECT idMaterial, materialName, VKPreis from Material where idMaterial in (select idMaterial from Verbrauch where idKV in (SELECT idKV from Kostenvoranschlag where idSchadensfall = 1 and freigegeben = 'ja'))");
 		return material;
+	}
+
+	public ArrayList<Adresse> getAllAdresses() throws SQLException {
+		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Adresse; ");
+		ResultSet rs= stmt.executeQuery();
+		
+		ArrayList<Adresse> allAdressesList = new ArrayList<Adresse>();
+		
+		while(rs.next()) {
+			allAdressesList.add(new Adresse(rs.getInt("idAdresse"),rs.getString("Strasse"), rs.getInt("Hnr"), rs.getInt("PLZ"), rs.getString("Ort")));
+		}
+		
+		return allAdressesList;
+	}
+	
+	//Philipp
+	
+	public void writeSchadensfall(Schadensfall sf, int idGeschaedigter) throws SQLException{
+		Statement wrSF = connection.createStatement();
+		String query;
+		query=  "INSERT INTO Schadensfall (Schadenart, SchadennummerExtern,idMitarbeiter,idAdresse, Anlagedatum, Schadendatum,Beschreibung) " + 
+				"values ('" + sf.getSchadenart() + "', '" + sf.getSchadenNummerExtern() + "'," + sf.getIdMitarbeiter() +
+				", "  + sf.getIdAdresse() + ", '" + sf.getAnlageDatum()  + "', '" + sf.getSchadenDatum() + "', '" +
+				sf.getBeschreibung() + "');" ;
+		wrSF.executeUpdate(query);
+		//System.out.println(query);
+		
+		PreparedStatement read=connection.prepareStatement("SELECT distinct last_insert_id() FROM Sanierung.Schadensfall;");
+		ResultSet rs=read.executeQuery();
+		int schadensfall_ID = -1;
+		while (rs.next()){
+			schadensfall_ID=rs.getInt("last_insert_id()");			
+		}	
+		
+		query= "INSERT INTO Geschaedigte (SchadensfallID, PersonenID) values ( " + schadensfall_ID +  ", " + idGeschaedigter + " );";
+		wrSF.executeUpdate(query);
+		//System.out.println(query);
+		
+
 	}
 	
 	public ArrayList<Kostenvoranschlag> getKostenvoranschlaege(int idSchadensfall) throws SQLException {

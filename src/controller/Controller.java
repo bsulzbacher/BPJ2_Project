@@ -2,25 +2,30 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-
-
-
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import java.util.Calendar;
+import java.util.Date;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.stage.Stage;
 import model.Kostenvoranschlag;
+import model.Adresse;
 import model.KvItem;
 import model.Mitarbeiter;
 import model.Rechnung;
+import model.Person;
 import model.Schadensfall;
 import model.Material;
 import utils.ConnectionHelper;
@@ -39,9 +44,9 @@ public class Controller {
 	}
 	
 	//
-	// Überprüfung der eingegebenen Logindaten 
+	// ï¿½berprï¿½fung der eingegebenen Logindaten 
 	// Aufruf der Methode checkLoginDaten() aus der Klasse ConnectionHelper.java
-	// Rückgabewert: Objekt der Klasse Mitarbeiter
+	// Rï¿½ckgabewert: Objekt der Klasse Mitarbeiter
 	//
 	public Mitarbeiter checkLogin(String benutzername, String passwort) throws SQLException {
 		Mitarbeiter mitarbeiter = null;
@@ -60,7 +65,7 @@ public class Controller {
 		final LoginView login = new LoginView();
 		login.showLogin(stage);
 		
-		// Hinzufügen eines Events bei Klick auf den Button "Anmelden
+		// Hinzufï¿½gen eines Events bei Klick auf den Button "Anmelden
 		login.getLoginButton().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
 				//Holen der eingegebenen Werte mit Getter-Methoden der Klasse LoginView.java
@@ -100,7 +105,7 @@ public class Controller {
 		main.showBenutzerdaten(mitarbeiter.getMitarbeiterBezeichnung());
 		//Bei Klick auf den Testbutton wird die Funktion aus der Klasse
 		//MainView.java aufgerufen, um eine Inhalt im mittleren Bereich des Fensters anzuzeigen
-		// Hinzufügen eines Events bei Klick auf den Button "Anmelden
+		// Hinzufï¿½gen eines Events bei Klick auf den Button "Anmelden
 		main.getButtonErfassen().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
 				try {
@@ -142,7 +147,6 @@ public class Controller {
 			}
        }); 
 		
-		
 		main.getButtonRechnungsexport().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
 				try {
@@ -156,8 +160,6 @@ public class Controller {
 	
 	}
 	
-	
-
 	private void exportRechnung(MainView main) throws SQLException {
 		// TODO Christian
 		main.setRgnList(FXCollections.observableArrayList(connection.getAllRechnungen()));
@@ -360,7 +362,7 @@ public class Controller {
 					
 				}else{
 					   
-				        alert.setContentText("Material auswählen!");
+				        alert.setContentText("Material auswï¿½hlen!");
 				        alert.setTitle("Fehler");
 				        alert.setHeaderText("EingabeFehler Material");
 				        alert.showAndWait();
@@ -393,7 +395,7 @@ public class Controller {
 					}
 					
 				} else {
-					alert.setContentText("Schadensfall auswählen!");
+					alert.setContentText("Schadensfall auswï¿½hlen!");
 			        alert.setTitle("Fehler");
 			        alert.setHeaderText("EingabeFehler Schadensfall");
 			        alert.showAndWait();
@@ -402,9 +404,104 @@ public class Controller {
 		}); 
 	}
 
-	private void erfasseSchadensfall(MainView main) throws SQLException {
+	private void erfasseSchadensfall(final MainView main) throws SQLException {
 		// TODO Philipp
+		
+		main.getSchErfOkAndSave().setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent arg0) {
+				final Alert alert = new Alert(AlertType.INFORMATION);
+				Mitarbeiter bearbeitenderMA = main.getMitarbeiterComboBox().getSelectionModel().getSelectedItem();
+				Adresse schAdresse = main.getSchadensadresseComboBox().getSelectionModel().getSelectedItem();
+				Person geschaedigter  = main.getGeschaedigterComboBox().getSelectionModel().getSelectedItem();
+				boolean fehlendeEingabedaten = false;
+				String schadendatum;
+				String anlagedatum;
+				
+				if(!fehlendeEingabedaten && bearbeitenderMA == null){
+					alert.setContentText("Kein Mitarbeiter angegeben!");
+					fehlendeEingabedaten  = true;
+				}
+				
+				if(!fehlendeEingabedaten && geschaedigter == null){
+					alert.setContentText("Kein Geschaedigter angegeben!");
+			        fehlendeEingabedaten = true;
+				}
+				
+				if(!fehlendeEingabedaten && schAdresse == null){
+					alert.setContentText("Keine Schadensfalladresse angegeben!");
+					fehlendeEingabedaten  = true;
+				}
+				
+				if(fehlendeEingabedaten){
+				
+			        alert.setTitle("Fehler");
+			        alert.setHeaderText("Fehlende Eingabedaten!");
+			        alert.showAndWait();
+			        return;
+				
+		 	    }
+				
+				
+				// ÃœberprÃ¼fen, ob Datum stimmen:
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat sqlFormat = new SimpleDateFormat("yyyyMMdd");
+				Date schadensDatum = null;
+				Date anlageDatum = null;
+				
+				alert.setTitle("Fehler");
+		        alert.setHeaderText("Falsche Eingabedaten!");
+				
+				try {
+					schadensDatum = dateFormat.parse(main.getSchadensdatumText().getText());
+				}
+				catch (ParseException pe) {
+					alert.setContentText("Kein gÃ¼ltiges Datum als Schadensdatum angegeben!");
+			        alert.showAndWait();
+			        return;
+				}
+				
+				try {
+					anlageDatum = dateFormat.parse(main.getAnlagedatumText().getText());
+				}
+				catch (ParseException pe) {
+					alert.setContentText("Kein gÃ¼ltiges Datum als Anlagedatum angegeben!");
+			        alert.showAndWait();
+			        return;
+				}
+				
+				Calendar c = Calendar.getInstance();
+				c.setTime(schadensDatum);
+				System.out.println(main.getSchadensdatumText().getText());
+				System.out.println(sqlFormat.format(c.getTime()));
+				schadendatum = sqlFormat.format(c.getTime());
+				
+				c.setTime(anlageDatum);
+				System.out.println(main.getAnlagedatumText().getText());
+				System.out.println(sqlFormat.format(c.getTime()));
+				anlagedatum = sqlFormat.format(c.getTime()); 
+				
+				Schadensfall sf = new Schadensfall(0,schAdresse.getIdAdresse(),main.getSchadensartText().getText(),
+						 main.getExtSchadensnummerText().getText(),bearbeitenderMA.getMitarbeiter_ID(),anlagedatum,schadendatum,
+						 main.getBeschreibungText().getText());
+				
+				try {
+					connection.writeSchadensfall(sf, geschaedigter.getPersonID());
+					alert.setTitle("Erfolg");
+			        alert.setHeaderText("Speichern erfolgt.");
+					alert.setContentText("Daten wurden in die Datenbank geschrieben!");
+			        alert.showAndWait();
+					main.zeichneSchadenfallerfassung();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		});
+		
 		main.setMAList(FXCollections.observableArrayList(connection.getAllMitarbeiter()));
+		main.setGSList(FXCollections.observableArrayList(connection.getAllGeschaedigte()));
+		main.setAdresseList(FXCollections.observableArrayList(connection.getAllAdresses()));
 		main.zeichneSchadenfallerfassung();
 	}
 }
