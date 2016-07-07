@@ -225,11 +225,17 @@ public class Controller {
 		main.getButtonMatHinzu().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
 				Schadensfall sf = main.getSfBox2().getSelectionModel().getSelectedItem();
+				if(sf==null) {
+					return;
+				}
 				String kundendaten = sf.getGeschaedigter();
 				kundendaten = kundendaten + "\n" + sf.getAdresse();
 				System.out.println(kundendaten);
 				main.setKundenDaten(kundendaten);
 				Kostenvoranschlag kv = main.getKvBox().getSelectionModel().getSelectedItem();
+				if(kv==null) {
+					return;
+				}
 				try {
 					main.setGesamtSumKv(connection.getKVsum(kv.getIdKV()));
 				} catch (SQLException e1) {
