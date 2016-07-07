@@ -43,6 +43,10 @@ public class Controller {
 		mitarbeiter = null;
 	}
 	
+	public ConnectionHelper getConnectionHelper(){
+		return connection;
+	}
+	
 	//
 	// ï¿½berprï¿½fung der eingegebenen Logindaten 
 	// Aufruf der Methode checkLoginDaten() aus der Klasse ConnectionHelper.java
@@ -185,7 +189,7 @@ public class Controller {
 				final Alert alert = new Alert(AlertType.INFORMATION);
 
 				alert.setContentText("Export ist erfogt!");
-		        alert.setTitle("Export durchgeführt");
+		        alert.setTitle("Export durchgefï¿½hrt");
 		        alert.setHeaderText("");
 		        alert.showAndWait();
 				
@@ -282,7 +286,7 @@ public class Controller {
 							connection.updateKv(main.getKvBox().getSelectionModel().getSelectedItem().getIdKV(),
 									"ja");
 							alert.setContentText("Die Beauftragung ist erfogt!");
-					        alert.setTitle("Bearbeitung durchgeführt");
+					        alert.setTitle("Bearbeitung durchgefï¿½hrt");
 					        alert.setHeaderText("");
 					        alert.showAndWait();
 					        erteileAuftrag(main);
@@ -292,7 +296,7 @@ public class Controller {
 						}
 						
 					}else {
-						alert.setContentText("Kein Schadensfall ausgewählt");
+						alert.setContentText("Kein Schadensfall ausgewï¿½hlt");
 				        alert.setTitle("Fehler");
 				        alert.setHeaderText("Fehler");
 				        alert.showAndWait();
@@ -307,7 +311,7 @@ public class Controller {
 							connection.updateKv(main.getKvBox().getSelectionModel().getSelectedItem().getIdKV(),
 									"abgelehnt");
 							alert.setContentText("Der Auftrag wurde storniert!");
-					        alert.setTitle("Bearbeitung durchgeführt");
+					        alert.setTitle("Bearbeitung durchgefï¿½hrt");
 					        alert.setHeaderText("");
 					        alert.showAndWait();
 					        erteileAuftrag(main);
@@ -317,7 +321,7 @@ public class Controller {
 						}
 						
 					}else {
-						alert.setContentText("Kein Schadensfall ausgewählt");
+						alert.setContentText("Kein Schadensfall ausgewï¿½hlt");
 				        alert.setTitle("Fehler");
 				        alert.setHeaderText("Fehler");
 				        alert.showAndWait();
@@ -404,7 +408,7 @@ public class Controller {
 		}); 
 	}
 
-	private void erfasseSchadensfall(final MainView main) throws SQLException {
+	public void erfasseSchadensfall(final MainView main) throws SQLException {
 		// TODO Philipp
 		
 		main.getSchErfOkAndSave().setOnAction(new EventHandler<ActionEvent>() {
