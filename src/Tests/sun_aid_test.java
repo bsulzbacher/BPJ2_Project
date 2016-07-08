@@ -9,15 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.loadui.testfx.GuiTest;
-import org.loadui.testfx.categories.TestFX;
-
 import controller.Controller;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import model.Adresse;
 import model.Kostenvoranschlag;
@@ -31,6 +25,7 @@ import model.Schadensfall;
 import utils.DBConnection;
 import view.MainView;
 
+@SuppressWarnings("restriction")
 public class sun_aid_test {
 
 	// Test Model
@@ -153,7 +148,7 @@ public class sun_aid_test {
 	}
 
 	    @Test
-	    public void testA() throws InterruptedException {
+	    public void testGUI_1() throws InterruptedException {
 	        Thread thread = new Thread(new Runnable() {
 
 	            @Override
